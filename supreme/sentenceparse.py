@@ -14,7 +14,7 @@ CONVOKIT_HOME = "/Users/rmundhe/.convokit"
 # OPEN FILE
 jsonfile = "results.csv"
 ft = open(jsonfile, "w")
-ft.write("mod,verbs,case,speaker,role,side,sentence\n")
+ft.write("mod^verbs^case^speaker^role^side^sentence\n")
 # ----------------------------------------------------------------------------------------------------------------
 ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
 uttfile = ROOT_DIR + "/utterances.jsonl"
@@ -74,18 +74,18 @@ for u in corpus.iter_utterances(lambda u: u.meta["questions"] != []):
                 vb.append(tokenized["tok"])
     if hasmod:
         for m in mod:
-            fileline = fileline + m + ","
-            fileline = fileline + (' - '.join(vb)) + ","
+            fileline = fileline + m + "^"
+            fileline = fileline + (' - '.join(vb)) + "^"
             print("Case: ",u.meta["case_id"])
-            fileline = fileline + u.meta["case_id"] + ","
+            fileline = fileline + u.meta["case_id"] + "^"
             print("Speaker: ", u.speaker.meta["name"])
-            fileline = fileline + u.speaker.meta["name"] + ","
+            fileline = fileline + u.speaker.meta["name"] + "^"
             print("Speaker Role: ", u.speaker.meta["type"])
-            fileline = fileline + u.speaker.meta["type"] + ","
+            fileline = fileline + u.speaker.meta["type"] + "^"
             print("Speaker Side: ", u.meta["side"])
-            fileline = fileline + str(u.meta["side"]) + ","
+            fileline = fileline + str(u.meta["side"]) + "^"
             print("Sentence", u.meta["clean_text"])
-            fileline = fileline + u.meta["clean_text"] + ","
+            fileline = fileline + u.meta["clean_text"] + "^"
             ft.write(fileline + "\n")
             print("========================================================================")
 
