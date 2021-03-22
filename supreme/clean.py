@@ -1,15 +1,13 @@
 from convokit.text_processing import TextProcessor
 from convokit.text_processing import TextParser
 from supreme.model.supremeCorpus import *
-
-# ADJUST THE FOLLOWING
 # ----------------------------------------------------------------------------------------------------------------
+# ADJUST THE FOLLOWING
 year = 2016
 minyear = None
 maxyear = None
 CONVOKIT_HOME = "/Users/rmundhe/.convokit"
 # ----------------------------------------------------------------------------------------------------------------
-
 ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
 uttfile = ROOT_DIR + "/utterances.jsonl"
 if (minyear == None):
@@ -18,7 +16,10 @@ if (minyear == None):
 if (maxyear == None):
     if (year != None):
         maxyear = year
-
+print("initializing sample corpus.")
+corpus = SupremeCorpus(dirname=ROOT_DIR, uttfile=uttfile, minyear=minyear, maxyear=maxyear)
+print("corpus initialized")
+# ----------------------------------------------------------------------------------------------------------------
 
 # basic cleanup for raw text file
 def preprocess_text(text):
@@ -26,13 +27,8 @@ def preprocess_text(text):
     text = text.replace('\n', ' ')
     return text
 
-
 textprep = TextProcessor(proc_fn=preprocess_text, output_field='clean_text')
 texttagger = TextParser(output_field='tagged', input_field='clean_text', mode='tag')
-
-print("initializing sample corpus.")
-corpus = SupremeCorpus(dirname=ROOT_DIR, uttfile=uttfile, minyear=minyear, maxyear=maxyear)
-print("corpus initialized")
 
 count = 0
 # assuming utterance file is sorted by year

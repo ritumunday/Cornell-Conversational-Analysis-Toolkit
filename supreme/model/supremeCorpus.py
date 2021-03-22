@@ -1,6 +1,8 @@
 from convokit.model import *
 from typing import List, Collection, Callable, Set, Generator, Tuple, Optional, ValuesView, Union
 import json
+from nltk.tokenize import sent_tokenize
+
 
 # Overriding default constructor to load specific year from full corpus.
 # This can be done by directly downloading year specific corpus from Cornell,
@@ -34,7 +36,9 @@ class SupremeCorpus(Corpus):
 
         with open(uttfile, "r") as f:
             utterances = []
+            sentences = {}
             idx = 0
+
             for line in f:
                 if idx >= utterance_end_index:
                     break
@@ -47,7 +51,18 @@ class SupremeCorpus(Corpus):
                     continue
                 if utyear > maxyear:
                     break
-                utterances.append(utjson)
+                i = 0
+                utid = utjson["id"]
+                for s in sent_tokenize(utjson["text"]):
+                    ids = utid + "_" + str(i)
+                    utjson["id"]=ids
+                    utjson["text"]=s
+                    utterances.append(utjson)
+
+                    uttsent = {"id": ids,"text": s, "utterance_id": utjson["id"]}
+
+                    sentences[ids] = uttsent
+                    i = i + 0
                 idx = idx + 1
 
         speakers_data = load_speakers_data_from_dir(dirname, exclude_speaker_meta)
@@ -56,9 +71,9 @@ class SupremeCorpus(Corpus):
 
         self.utterances = dict()
         self.speakers = dict()
+        self.sentences = dict()
 
         initialize_speakers_and_utterances_objects(self, self.utterances, utterances, self.speakers, speakers_data)
-
         self.meta_index.enable_type_check()
 
         with open(os.path.join(dirname + "/index.json"), "r") as f:
@@ -81,3 +96,10 @@ class SupremeCorpus(Corpus):
         self.conversations = initialize_conversations(self, self.utterances, convos_data)
         self.meta_index.enable_type_check()
         self.update_speakers_data()
+
+
+
+
+
+
+
