@@ -5,6 +5,7 @@ from convokit.text_processing import TextProcessor
 
 # ----------------------------------------------------------------------------------------------------------------
 # ADJUST THE FOLLOWING
+sep="\t"
 year = 1956
 minyear = None
 maxyear = None
@@ -12,9 +13,9 @@ sentences = 1000
 CONVOKIT_HOME = "/Users/rmundhe/.convokit"
 # ----------------------------------------------------------------------------------------------------------------
 # OPEN FILE
-jsonfile = "results.csv"
+jsonfile = "results.tsv"
 ft = open(jsonfile, "w")
-ft.write("mod^verbs^case^speaker^role^side^sentence\n")
+ft.write("mod"+sep+"verbs"+sep+"case"+sep+"speaker"+sep+"role"+sep+"side"+sep+"sentence\n")
 # ----------------------------------------------------------------------------------------------------------------
 ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
 uttfile = ROOT_DIR + "/utterances.jsonl"
@@ -74,18 +75,18 @@ for u in corpus.iter_utterances(lambda u: u.meta["questions"] != []):
                 vb.append(tokenized["tok"])
     if hasmod:
         for m in mod:
-            fileline = fileline + m + "^"
-            fileline = fileline + (' - '.join(vb)) + "^"
+            fileline = fileline + m + sep
+            fileline = fileline + (' - '.join(vb)) + sep
             print("Case: ",u.meta["case_id"])
-            fileline = fileline + u.meta["case_id"] + "^"
+            fileline = fileline + u.meta["case_id"] + sep
             print("Speaker: ", u.speaker.meta["name"])
-            fileline = fileline + u.speaker.meta["name"] + "^"
+            fileline = fileline + u.speaker.meta["name"] + sep
             print("Speaker Role: ", u.speaker.meta["type"])
-            fileline = fileline + u.speaker.meta["type"] + "^"
+            fileline = fileline + u.speaker.meta["type"] + sep
             print("Speaker Side: ", u.meta["side"])
-            fileline = fileline + str(u.meta["side"]) + "^"
+            fileline = fileline + str(u.meta["side"]) + sep
             print("Sentence", u.meta["clean_text"])
-            fileline = fileline + u.meta["clean_text"] + "^"
+            fileline = fileline + u.meta["clean_text"] + sep
             ft.write(fileline + "\n")
             print("========================================================================")
 
