@@ -1,3 +1,5 @@
+from functools import reduce
+
 from convokit.phrasing_motifs import QuestionSentences
 from supreme.model.supremeCorpus import *
 from convokit.text_processing import TextParser
@@ -5,7 +7,7 @@ from convokit.text_processing import TextProcessor
 
 # ----------------------------------------------------------------------------------------------------------------
 # ADJUST THE FOLLOWING
-sep="\t"
+sep = "\t"
 year = 1956
 minyear = None
 maxyear = None
@@ -15,7 +17,8 @@ CONVOKIT_HOME = "/Users/rmundhe/.convokit"
 # OPEN FILE
 jsonfile = "results.tsv"
 ft = open(jsonfile, "w")
-ft.write("mod"+sep+"verbs"+sep+"case"+sep+"speaker"+sep+"role"+sep+"side"+sep+"sentence\n")
+# ft.write("mod"+sep+"verbs"+sep+"case"+sep+"speaker"+sep+"role"+sep+"side"+sep+"sentence\n")
+ft.write("Sentence ID" + sep + "Before" + sep + "Mod" + sep + "After" + sep + "Main Verb\n")
 # ----------------------------------------------------------------------------------------------------------------
 ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
 uttfile = ROOT_DIR + "/utterances.jsonl"
@@ -26,7 +29,7 @@ if (maxyear == None):
     if (year != None):
         maxyear = year
 print("========================================================================")
-print("Initializing sample corpus with",sentences,"sentences from year",minyear,"to",maxyear)
+print("Initializing sample corpus with", sentences, "sentences from year", minyear, "to", maxyear)
 corpus = SupremeCorpus(dirname=ROOT_DIR, uttfile=uttfile, minyear=minyear, maxyear=maxyear,
                        utterance_end_index=sentences)
 print("Corpus initialized")
@@ -58,37 +61,42 @@ print("========================================================================"
 # assuming utterance file is sorted by year
 for u in corpus.iter_utterances(lambda u: u.meta["questions"] != []):
     parsedsent = u.meta["parsed"]
-    fileline = ""
-    text = u.meta["case_id"],"- ", u.speaker.meta["name"],"- ", u.meta["clean_text"]
+    modentry = ""
+    text = u.meta["case_id"], "- ", u.speaker.meta["name"], "- ", u.meta["clean_text"]
+    cleantext = u.meta["clean_text"]
     hasmod = 0
-    mod = []
-    vb = []
+    vb = ""
+    first = ""
+    last = ""
+    mod = ""
+    i = 0
+    passive = 0
     # Print modal and main verb in the question
     for word in parsedsent:
         # sentence
         for tokenized in word["toks"]:
             # word
             if tokenized["tag"] == "MD":
-                mod.append(tokenized["tok"])
                 hasmod = 1
-            if tokenized["tag"] == "VB" and hasmod:
-                vb.append(tokenized["tok"])
-    if hasmod:
-        for m in mod:
-            fileline = fileline + m + sep
-            fileline = fileline + (' - '.join(vb)) + sep
-            print("Case: ",u.meta["case_id"])
-            fileline = fileline + u.meta["case_id"] + sep
-            print("Speaker: ", u.speaker.meta["name"])
-            fileline = fileline + u.speaker.meta["name"] + sep
-            print("Speaker Role: ", u.speaker.meta["type"])
-            fileline = fileline + u.speaker.meta["type"] + sep
-            print("Speaker Side: ", u.meta["side"])
-            fileline = fileline + str(u.meta["side"]) + sep
-            print("Sentence", u.meta["clean_text"])
-            fileline = fileline + u.meta["clean_text"] + sep
-            ft.write(fileline + "\n")
-            print("========================================================================")
+                mod = tokenized["tok"]
+                toks = list(map(lambda x: x['tok'], parsedsent[0]["toks"]))
+                first = "" if i == 0 else reduce((lambda x, y: x + " " + y), toks[0:i])
+                last = "" if i == len(toks) - 1 else reduce((lambda x, y: x + " " + y), toks[i + 1:len(toks)])
+            if tokenized["tag"] == "VB":
+                if tokenized["dep"] == "auxpass":
+                    passive = 1
+            if ((tokenized["tag"] == "VB" and passive == 0) or (passive == 1 and tokenized["tag"] == "VBN")) and hasmod:
+                vb = tokenized["tok"]
+                modentry = u.id + sep + first + sep + mod.lower() + sep + last + sep + vb.lower() + "\n"
+                ft.write(modentry)
+                modentry = ""
+                hasmod = 0
+                mod = ""
+                first = ""
+                last = ""
+                passive = 0
+            i = i + 1
+print("========================================================================")
 
 ft.close()
 print("Finished processing.")
