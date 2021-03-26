@@ -112,7 +112,7 @@ class Sentenceparse:
                             modentry = mod = first = last = ""
                             hasmod = passive = 0
 
-                            i = i + 1
-        print("Closing result file")
+                        i = i + 1
+        print("Result file saved in supreme/results folder.")
         print("========================================================================")
         ft.close()
