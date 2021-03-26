@@ -7,7 +7,7 @@ from convokit.text_processing import TextProcessor
 
 class Sentenceparse:
     """
-    Contains functionality needed to perform processing needed for modal searches.
+    Object with functionality for modal searches in sentences.
     """
 
     def __init__(self, ROOT_DIR, minyear, maxyear, limit, uttfile, separator, resultfile):
@@ -32,7 +32,12 @@ class Sentenceparse:
         text = text.replace('\n', ' ')
         return text
 
+    """
+    Loads corpus by sentence and prepares model for modal search. 
+    """
+
     def loadcorpus(self):
+
         print("========================================================================")
         print("Loading sample corpus with", self.limit, "sentences from year", self.minyear, "to", self.maxyear)
         self.corpus = SupremeCorpus(dirname=self.ROOT_DIR, uttfile=self.uttfile, minyear=self.minyear,
@@ -54,6 +59,10 @@ class Sentenceparse:
         # Filter questions
         transformer = QuestionSentences(input_field='parsed', output_field='questions', use_caps=True)
         self.corpus = transformer.transform(self.corpus)
+
+    """
+     Searches for modals and main verbs and generates excel file for KWIC analysis. 
+     """
 
     def modalkwic(self, separator, resultfile):
         ft = open(resultfile, "w")
