@@ -2,7 +2,7 @@ import getopt
 import sys
 import time
 
-from supreme.features.sentenceparse import Sentenceparse
+from supreme.features.modalHelper import ModalHelper
 
 """
 Script runs processing and generates KWIC file for supreme-corpus. Accepts optional arguments "--minyear", "--maxyear", "--year", "--limit"
@@ -39,7 +39,7 @@ def main():
         limit = int(current_value) if current_argument in ("-l", "--limit") else limit
         minyear = year if ((minyear is None) and (year is not None)) else minyear
         maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
-    Sentenceparse(download_dir, minyear, maxyear, limit, uttfile, separator, resultfile)
+    ModalHelper(download_dir, minyear, maxyear, limit, uttfile, separator, resultfile)
 
 
 if __name__ == '__main__':

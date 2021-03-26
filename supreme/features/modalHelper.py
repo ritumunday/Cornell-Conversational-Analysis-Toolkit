@@ -5,7 +5,7 @@ from convokit.text_processing import TextParser, sys
 from convokit.text_processing import TextProcessor
 
 
-class Sentenceparse:
+class ModalHelper:
     """
     Object with functionality for modal searches in sentences.
     """
@@ -80,7 +80,7 @@ class Sentenceparse:
             # Find modal and main verb in the sentence
             for parsedsent in parsedsents:
                 if (len(parsedsent)):
-                    modentry = mod = first = last = ""
+                    fileline = mod = first = last = ""
                     hasmod = passive = i = 0
                     # for word in parsedsent:
                     # sentence
@@ -105,11 +105,11 @@ class Sentenceparse:
                             ((passive == 1) and (tokenized["tag"] == "VBN"))) and \
                                 hasmod:
                             vb = tokenized["tok"]
-                            modentry = u.meta[
+                            fileline = u.meta[
                                            "year"] + separator + u.id + separator + first + separator + mod.lower() + separator + last + separator + vb.lower() + separator + \
                                        u.speaker.meta['name'] + separator + u.speaker.meta['type'] + "\n"
-                            ft.write(modentry)
-                            modentry = mod = first = last = ""
+                            ft.write(fileline)
+                            fileline = mod = first = last = ""
                             hasmod = passive = 0
 
                         i = i + 1
