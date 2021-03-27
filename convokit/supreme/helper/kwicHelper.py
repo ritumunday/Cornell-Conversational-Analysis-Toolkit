@@ -112,6 +112,7 @@ class KwicHelper:
                             unmatchedmodal = 0
 
                         i = i + 1
+        print("========================================================================")
         print("Result file saved in supreme/results folder.")
         print("========================================================================")
         ft.close()
