@@ -1,3 +1,6 @@
+import getopt
+import sys
+
 from convokit.model import *
 from typing import List, Optional
 import json
@@ -7,37 +10,16 @@ from nltk.tokenize import sent_tokenize
 class SupremeCorpus(Corpus):
     """
     This initializer overrides default initializer to load specific year from full corpus.
-    This only processes json lines which contain year in the range in the case-id,
-    and avoids processing the whole file before filtering by year.
-    This can also be done by downloading year specific supreme-corpus from Cornell repo.
-    This constructor can also accept path to any smaller utterance json file taken from
-    the larger corpus.
+    This only processes json lines within cases in specified years,
+    and avoids processing entire file without filters applied.
+    This can also be avoided by downloading year specific supreme-corpus from Cornell repo.
+    This constructor opttionally accepts path to a smaller utterance json file taken from the larger corpus.
 
-    :param uttfile: Path to the file containing utterance json
-    :param minyear: Year of utterance to begin corpus with
-    :param maxyear: Year of utterance to end corpus with
-    :param filename: Path to a folder containing a Corpus or to an utterances.jsonl / utterances.json file to load
-    :param utterances: list of utterances to initialize Corpus from
-    :param preload_vectors: list of names of vectors to be preloaded from directory; by default,
-        no vectors are loaded but can be loaded any time after corpus initialization (i.e. vectors are lazy-loaded).
-    :param utterance_start_index: if loading from directory and the corpus folder contains utterances.jsonl, specify the
-        line number (zero-indexed) to begin parsing utterances from
-    :param utterance_end_index: if loading from directory and the corpus folder contains utterances.jsonl, specify the
-        line number (zero-indexed) of the last utterance to be parsed.
-    :param merge_lines: whether to merge adjacent lines from same speaker if multiple consecutive utterances belong to
-        the same conversation.
-    :param exclude_utterance_meta: utterance metadata to be ignored
-    :param exclude_conversation_meta: conversation metadata to be ignored
-    :param exclude_speaker_meta: speaker metadata to be ignored
-    :param exclude_overall_meta: overall metadata to be ignored
+    :param uttfile(Optional): Path to the file containing utterance json
 
-    :ivar meta_index: index of Corpus metadata
-    :ivar vectors: the vectors stored in the Corpus
-    :ivar corpus_dirpath: path to the directory the corpus was loaded from
     """
 
     def __init__(self, dirname: str, uttfile: Optional[str] = None,
-                 minyear: int = None, maxyear: int = None,
                  utterances: Optional[List[Utterance]] = None,
                  preload_vectors: List[str] = None,
                  utterance_start_index: int = None,
@@ -48,8 +30,25 @@ class SupremeCorpus(Corpus):
                  exclude_overall_meta: Optional[List[str]] = None,
                  disable_type_check=True):
 
-        minyear = 0 if (minyear is None) else minyear
-        maxyear = float('inf') if (maxyear is None) else maxyear
+        # Default args
+        maxyear = minyear = None
+        year = 1956
+        limit = float('inf')
+
+        # COMMAND LINE ARGUMENTS
+        full_cmd_arguments = sys.argv
+        argument_list = full_cmd_arguments[1:]
+        short_options = "y:n:x:l:"
+        long_options = ["year=", "maxyear=", "minyear=", "limit="]
+        arguments, values = getopt.getopt(argument_list, short_options, long_options)
+        for current_argument, current_value in arguments:
+            maxyear = int(current_value) if current_argument in ("-x", "--maxyear") else maxyear
+            minyear = int(current_value) if current_argument in ("-n", "--minyear") else minyear
+            year = int(current_value) if current_argument in ("-y", "--year") else year
+            utterance_end_index = int(current_value) if current_argument in ("-l", "--limit") else limit
+            minyear = year if ((minyear is None) and (year is not None)) else minyear
+            maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
+
         self.meta_index = ConvoKitIndex(self)
         self.meta = ConvoKitMeta(self.meta_index, 'corpus')
 
