@@ -11,11 +11,11 @@ class KwicHelper:
     """
 
     def __init__(self, corpus, separator, resultfile):
-        print("Started processing.")
+        print("Started processing")
         self.corpus = corpus
         self.loadcorpus()
         self.modalkwic(separator, resultfile)
-        print("Finished processing.")
+        print("Finished processing")
 
     """
     Basic cleanup function for raw sentences
@@ -62,14 +62,12 @@ class KwicHelper:
     """
 
     def modalkwic(self, separator, resultfile):
-        print("Writing result file")
+        print("Creating KWIC")
         ft = open(resultfile, "w")
         # header row
         ft.write(
             "Year" + separator + "Sentence ID" + separator + "Before" + separator + "Mod" + separator + "After" + separator + "Main Verb" + separator + "Passive" + separator + "Speaker" + separator + "Role" + "\n")
         print("========================================================================")
-
-        print("Finding modals")
         # assuming utterance file is sorted by year, iterate. Skip all non questions and non modals.
         for u in self.corpus.iter_utterances(lambda u: u.meta["ismodal"] == 1 and u.meta["questions"] != []):
 
