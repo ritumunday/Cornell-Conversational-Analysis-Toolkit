@@ -9,7 +9,7 @@ from nltk.tokenize import sent_tokenize
 
 class SupremeCorpus(Corpus):
     """
-    This initializer overrides default initializer to load specific year from full corpus.
+    This initializer overrides default initializer to load only modal sentences from specific years from full corpus.
     This only processes json lines within cases in specified years,
     and avoids processing entire file without filters applied.
     This can also be avoided by downloading year specific supreme-corpus from Cornell repo.
@@ -18,8 +18,12 @@ class SupremeCorpus(Corpus):
     :param uttfile(Optional): Path to the file containing utterance json
 
     """
+    CONVOKIT_HOME = "/Users/rmundhe/.convokit"
 
-    def __init__(self, dirname: str, uttfile: Optional[str] = None,
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self,
+                 maxyear, minyear, dirname: Optional[str], uttfile: Optional[str] = None,
                  utterances: Optional[List[Utterance]] = None,
                  preload_vectors: List[str] = None,
                  utterance_start_index: int = None,
@@ -29,28 +33,13 @@ class SupremeCorpus(Corpus):
                  exclude_speaker_meta: Optional[List[str]] = None,
                  exclude_overall_meta: Optional[List[str]] = None,
                  disable_type_check=True):
+        ROOT_DIR = self.CONVOKIT_HOME + "/downloads/supreme-corpus"
 
-        # Default args
-        maxyear = minyear = None
-        year = 1956
-        limit = float('inf')
-
-        # COMMAND LINE ARGUMENTS
-        full_cmd_arguments = sys.argv
-        argument_list = full_cmd_arguments[1:]
-        short_options = "y:n:x:l:"
-        long_options = ["year=", "maxyear=", "minyear=", "limit="]
-        arguments, values = getopt.getopt(argument_list, short_options, long_options)
-        for current_argument, current_value in arguments:
-            maxyear = int(current_value) if current_argument in ("-x", "--maxyear") else maxyear
-            minyear = int(current_value) if current_argument in ("-n", "--minyear") else minyear
-            year = int(current_value) if current_argument in ("-y", "--year") else year
-            utterance_end_index = int(current_value) if current_argument in ("-l", "--limit") else limit
-            minyear = year if ((minyear is None) and (year is not None)) else minyear
-            maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
+        if uttfile is None: uttfile = ROOT_DIR + "/utterances.jsonl"
 
         self.meta_index = ConvoKitIndex(self)
         self.meta = ConvoKitMeta(self.meta_index, 'corpus')
+
 
         # private storage
         self._vector_matrices = dict()
@@ -60,7 +49,10 @@ class SupremeCorpus(Corpus):
         if exclude_overall_meta is None: exclude_overall_meta = []
         if utterance_start_index is None: utterance_start_index = 0
         if utterance_end_index is None: utterance_end_index = float('inf')
-
+        if maxyear is None: maxyear = 1955
+        if minyear is None: minyear = 1955
+        self.meta["maxyear"] = maxyear
+        self.meta["minyear"] = minyear
         with open(uttfile, "r") as f:
             utterances = []
             idx = 0

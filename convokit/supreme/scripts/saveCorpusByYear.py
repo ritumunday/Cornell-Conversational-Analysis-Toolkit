@@ -1,7 +1,9 @@
+from convokit import QuestionSentences
+from convokit.supreme.model.saveUtterances import SaveUtterances
+from convokit.supreme.text_processing.modalSentences import ModalSentences
 from convokit.text_processing import TextProcessor
 from convokit.text_processing import TextParser
 from convokit.supreme.model.supremeCorpus import *
-from convokit.supreme.helper.kwicHelper import KwicHelper
 
 """
 Script generates text and utterance json files for 
@@ -12,47 +14,22 @@ Change CONVOKIT_HOME to your default convokit home directory.
 
 
 def main():
-    # ----------------------------------------------------------------------------------------------------------------
-    # ADJUST THE FOLLOWING.
-    CONVOKIT_HOME = "/Users/rmundhe/.convokit"
-    # ----------------------------------------------------------------------------------------------------------------
-    ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
-    uttfile = ROOT_DIR + "/utterances.jsonl"
-    print("initializing sample corpus.")
-    corpus = SupremeCorpus(dirname=ROOT_DIR, uttfile=uttfile)
-    print("corpus initialized")
-    fraw = open("../results/raw.txt", "w")
-    fjson = open("../results/tagged.json", "w")
-    # ----------------------------------------------------------------------------------------------------------------
-    # Process by utterance instead of whole corpus for efficiency over subset of utterances
-    textprep = TextProcessor(proc_fn=KwicHelper.prep_text, output_field='clean_text')
-    texttagger = TextParser(output_field='tagged', input_field='clean_text', mode='tag')
+    # COMMAND LINE ARGUMENTS
+    full_cmd_arguments = sys.argv
+    argument_list = full_cmd_arguments[1:]
+    short_options = "y:n:x:l:"
+    long_options = ["year=", "maxyear=", "minyear=", "limit="]
+    maxyear = year = minyear = utterance_end_index = None
+    arguments, values = getopt.getopt(argument_list, short_options, long_options)
+    for current_argument, current_value in arguments:
+        maxyear = int(current_value) if current_argument in ("-x", "--maxyear") else maxyear
+        minyear = int(current_value) if current_argument in ("-n", "--minyear") else minyear
+        year = int(current_value) if current_argument in ("-y", "--year") else year
+        utterance_end_index = int(current_value) if current_argument in ("-l", "--limit") else utterance_end_index
+    minyear = year if ((minyear is None) and (year is not None)) else minyear
+    maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
+    SaveUtterances(maxyear, minyear, utterance_end_index)
 
-    count = 0
-    # assuming utterance file is sorted by year
-    for u in corpus.iter_utterances():
-        count = count + 1
-        # clean and tag utterance
-        u = textprep.transform_utterance(u)
-        # u = texttagger.transform_utterance(u)
-        print("Processed ", u.id)
-
-        # save tagged json
-        # fjson.write(",\n")
-        # fjson.write(json.dumps(u.meta))
-
-        fraw.write("\n")
-        sp = u.get_speaker().meta
-        if sp["name"] != "":
-            name = sp["name"].replace('.', '')
-            fraw.write(name)
-            fraw.write(": ")
-        fraw.write(u.retrieve_meta('clean_text'))
-
-    fraw.close()
-    fjson.close()
-    print("Finished")
-    print("Total utterances processed: ", count)
 
 
 if __name__ == '__main__':
