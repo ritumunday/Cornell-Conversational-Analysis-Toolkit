@@ -35,9 +35,9 @@ class KwicHelper:
         self.ft.write(fileline)
 
     def prep_text(self, text):
-        text = text.replace(' --', '... ')
         text = text.replace('--', '... ')
         text = text.replace(',', '<comma> ')
+        text = text.replace('"', '<quote> ')
         text = text.replace('\n', ' ')
         return text
 
