@@ -90,10 +90,10 @@ def dolines(primlabel, seclabel):
     ax.plot(labels, secvalues, label=seclabel)
 
 
-modals = [["can"],["could"], ["shall"],["should"], ["must"], ["ought"], ["would"], ["may"],[ "might"], ["will"], ["need"]]
+modals = [["can","should"],  ["may","would"] ]
 # modals = [["could"] ]
 
-param = "role"
+param = "force"
 if param == "role":
     primlabel = "Others"
     seclabel = "Justices"
