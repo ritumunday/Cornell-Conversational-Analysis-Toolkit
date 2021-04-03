@@ -16,7 +16,7 @@ class PlotHelper:
     #   average over 4 years of
     #   percent score of interrogative "may" usage on baseline of all "may" usages,
     #   percent score of interrogative "can" usage on baseline of all "can" usages.
-    filedir = '../results/'
+    filedir = '/Users/rmundhe/PycharmProjects/Cornell-Conversational-Analysis-Toolkit/convokit/supreme/results/'
 
     def __init__(self):
         pass
@@ -52,7 +52,7 @@ class PlotHelper:
         ax.set_title(title)
         ax.legend()
         filepath = cls.filedir + (
-            datetime.now().isoformat()) + ".png" if filename is None else '../results/' + cls.filedir + filename
+            datetime.now().isoformat()) + ".png" if filename is None else   cls.filedir + filename
         if saveplt:
             plt.savefig(filepath, bbox_inches='tight')
         if showPlt:

@@ -57,8 +57,8 @@ def main():
                       "(4) modal negative usage over total use of respective modal usage \n"
                       "(Hit enter to use default 1):")
     modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, could, would, should, may'):")
-    saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 0):")
     bucket_ip = input("Enter number of years to average scores over (Hit enter to use default 4):")
+    saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 0):")
 
     modals = ["may", "would","can","could","should"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = 1 if option_ip == "" else int(option_ip)

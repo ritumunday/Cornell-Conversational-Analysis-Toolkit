@@ -10,6 +10,7 @@ class KwicHelper:
     """
     Object with functionality for modal KWIC formatting.
     """
+    filedir = '/Users/rmundhe/PycharmProjects/Cornell-Conversational-Analysis-Toolkit/convokit/supreme/results/'
 
     def __init__(self, corpus, separator, resultfile):
         self.separator = separator
@@ -110,7 +111,7 @@ class KwicHelper:
         line_list = []
         csv.field_size_limit(sys.maxsize)
         for fileyear in range(minyear, maxyear, 10):
-            csvfile = "../results/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+            csvfile = cls.filedir+"kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
             with open(csvfile, 'r') as data:
                 for line in csv.DictReader(data):
                     line_list.append(line)

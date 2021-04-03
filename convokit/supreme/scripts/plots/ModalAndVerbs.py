@@ -65,17 +65,18 @@ def main():
                       "(Hit enter to use default 1):")
     modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
     mv_ip = input("Enter a verb (Default 'ask'):")
-    forms_ip = input("Enter all forms of this verb separated by comma (Default 'ask, asked, asking, asks'):")
-    saveplt_ip = input("Save plot in a file? 1/0 (Default 0):")
+    forms_ip = input("Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
     bucket_ip = input("Enter number of years to average scores over (Default 4):")
+    saveplt_ip = input("Save plot in a file? 1/0 (Default 0):")
 
-    forms = ["ask", "asked", "asks", "asking"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
     mv = "ask" if mv_ip == "" else mv_ip
     modals = ["may", "can"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = 1 if option_ip == "" else int(option_ip)
     bucket = 4 if bucket_ip == "" else int(bucket_ip)
     saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
     lines_arr = KwicHelper.file_line_list()
+    forms = [mv, mv+"ed", mv+"s", mv+"ing"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
+
     verb = {mv: forms}
 
     title = ", ".join(modals) + " with " + ", ".join(verb.keys()) + '  ModalAndVerbs.py option ' + str(option)
