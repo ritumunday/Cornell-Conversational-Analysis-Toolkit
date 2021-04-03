@@ -1,9 +1,4 @@
 from convokit.supreme.helper.kwicHelper import KwicHelper
-
-# Option 1 is variations of usage of a modal over total count
-# option 2 is variations of a modal's interrogatives over total interrogatives
-# option 3 is variations of passive usage of a modal over all its usages
-# option 4 is variations of negative usage of a modal over all its usages
 from convokit.supreme.helper.plotHelper import PlotHelper
 
 
