@@ -7,6 +7,11 @@ from convokit.supreme.helper.kwicHelper import KwicHelper
 from convokit.supreme.helper.plotHelper import PlotHelper
 
 
+# (option 1) individual modal trends over total modal usage
+# (option 2) individual modal interrogative trends over total interrogative modal usage
+# (option 3) individual modal passives over total use of respective modal usage
+# (option 4) modal negative usage over total use of respective modal usage
+
 def score_dict(modalnames, linearr, option):
     filtered = {mod: {} for mod in modalnames}
     baseline = {mod: {} for mod in modalnames}
@@ -40,14 +45,34 @@ def score_dict(modalnames, linearr, option):
                 if l.get("Mod").lower() == mod.lower():
                     baseline[mod][year] = 1 if baseline[mod].get(year) is None else baseline[mod][year] + 1
 
-    return PlotHelper.plottable_dict({"score": filtered, "baseline": baseline})
+    return {"score": filtered, "baseline": baseline}
 
 
-lines_arr = KwicHelper.file_line_list()
-modals = ["can", "may", "should", "would"]
-option = 1
-title = 'can may ModalshiftPlots.py option ' + str(option)
-ylabel = "pct avg over 4 years"
-plotfilename = "may-can-inter.png"
-scores = score_dict(modals, lines_arr, option)
-PlotHelper.plot_lines(scores, ylabel, title, saveplt=True, filename=plotfilename)
+def main():
+    # COMMAND LINE ARGUMENTS
+    print("================ Modal Variations Over Time ================")
+
+    option_ip = input("Enter an option \n(1) individual modal trends over total modal usage \n(2) individual modal interrogative trends over total interrogative modal usage \n"
+                      "(3) individual modal passives over total use of respective modal usage \n"
+                      "(4) modal negative usage over total use of respective modal usage \n"
+                      "(Hit enter to use default 1):")
+    modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, could, would, should, may'):")
+    saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 0):")
+    bucket_ip = input("Enter number of years to average scores over (Hit enter to use default 4):")
+
+    modals = ["may", "would","can","could","should"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
+    option = 1 if option_ip == "" else int(option_ip)
+    bucket = 4 if bucket_ip == "" else int(bucket_ip)
+    saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
+
+    lines_arr = KwicHelper.file_line_list()
+    title = ", ".join(modals) + '  ModalshiftPlots.py option ' + str(option)
+    ylabel = str(bucket)+" year average percentages"
+    plotfilename = "-".join(modals) + "-modalshift-opt" + str(option) + ".png"
+    scores = score_dict(modals, lines_arr, option)
+    score_normalized = PlotHelper.plottable_dict(scores, bucket)
+    PlotHelper.plot_lines(score_normalized, ylabel, title, saveplt=saveplt, filename=plotfilename)
+
+
+if __name__ == '__main__':
+    main()

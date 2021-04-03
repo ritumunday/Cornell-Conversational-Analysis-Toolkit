@@ -2,11 +2,10 @@ from convokit.supreme.helper.kwicHelper import KwicHelper
 from convokit.supreme.helper.plotHelper import PlotHelper
 
 
-# Option 1 is variations of usage of a modal with main verb over total modal usage of main verb
-# option 2 is variations of a modal's interrogatives with main verb over total modal interrogative usage of main verb
-# option 3 is variations of passive usage of a modal with main verb over total modal usages of main verb
-# option 4 is variations of negative usage of a modal with main verb over total modal usages of main verb
-
+# (option 1) usage of main verb with given modal over total modal usage of main verb
+# (option 2) interrogative usage of main verb with given modal over total modal interrogatives of main verb
+# (option 3) passive usage of main verb with given modal over total modal usage of main verb
+# (option 4) negative usage of main verb with given modal over total modal usage of main verb
 def score_dict(modalnames, linearr, verb, option):
     filtered = {mod: {} for mod in modalnames}
     baseline = {mod: {} for mod in modalnames}
@@ -56,17 +55,23 @@ def score_dict(modalnames, linearr, verb, option):
 
 def main():
     # COMMAND LINE ARGUMENTS
-
-    option_ip = input("Please enter an option (1) all moodals (2) interrogative (3) passive (4) negative: (Default 1):")
-    modals_ip = input("Enter modal/modals separated by comma (Default 'can, may'):")
+    print("================ Modal Variations Over Time with Main Verb ================")
+    option_ip = input("Enter an option \n"
+                      "(1) usage of main verb with given modal over total modal usage of main verb \n"
+                      "(2) interrogative usage of main verb with given modal over total modal interrogatives of main "
+                      "verb \n"
+                      "(3) passive usage of main verb with given modal over total modal usage of main verb  \n"
+                      "(4) negative usage of main verb with given modal over total modal usage of main verb  \n"
+                      "(Hit enter to use default 1):")
+    modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
     mv_ip = input("Enter a verb (Default 'ask'):")
     forms_ip = input("Enter all forms of this verb separated by comma (Default 'ask, asked, asking, asks'):")
     saveplt_ip = input("Save plot in a file? 1/0 (Default 0):")
     bucket_ip = input("Enter number of years to average scores over (Default 4):")
 
-    forms = ["ask", "asked", "asks", "asking"] if forms_ip == "" else  [x.strip() for x in forms_ip.split(',')]
+    forms = ["ask", "asked", "asks", "asking"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
     mv = "ask" if mv_ip == "" else mv_ip
-    modals = ["may", "can"] if modals_ip == "" else  [x.strip() for x in modals_ip.split(',')]
+    modals = ["may", "can"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = 1 if option_ip == "" else int(option_ip)
     bucket = 4 if bucket_ip == "" else int(bucket_ip)
     saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
@@ -74,7 +79,7 @@ def main():
     verb = {mv: forms}
 
     title = ", ".join(modals) + " with " + ", ".join(verb.keys()) + '  ModalAndVerbs.py option ' + str(option)
-    plotfilename = "-".join(modals) + "_with_" + "-".join(verb.keys()) + "_opt"+str(option)+".png"
+    plotfilename = "-".join(modals) + "_with_" + "-".join(verb.keys()) + "_opt" + str(option) + ".png"
     scoredict = score_dict(modals, lines_arr, verb, option)
     normalized_score = PlotHelper.plottable_dict(scoredict, bucket)
     PlotHelper.plot_lines(normalized_score, "verb % avg", title, saveplt=saveplt, filename=plotfilename)
