@@ -36,7 +36,7 @@ def main():
     maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
 
     uttfile = os.path.abspath(".")+"/../results/utterances"+str(minyear)+"-"+str(maxyear)+".jsonl"
-    exists = os.path.exists(uttfile)
+
     if os.path.exists(uttfile) == False:
         SaveUtterances(maxyear, minyear,  utterance_end_index)
 
