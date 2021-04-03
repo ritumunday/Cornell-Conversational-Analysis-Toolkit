@@ -56,18 +56,25 @@ def main():
                       "(3) individual modal passives over total use of respective modal usage \n"
                       "(4) modal negative usage over total use of respective modal usage \n"
                       "(Hit enter to use default 1):")
-    modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, could, would, should, may'):")
+    modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, would, may'):")
     bucket_ip = input("Enter number of years to average scores over (Hit enter to use default 4):")
     saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 0):")
 
-    modals = ["may", "would","can","could","should"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
+    modals = ["may", "would","can" ] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = 1 if option_ip == "" else int(option_ip)
     bucket = 4 if bucket_ip == "" else int(bucket_ip)
     saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
 
     lines_arr = KwicHelper.file_line_list()
     title = ", ".join(modals) + '  ModalshiftPlots.py option ' + str(option)
-    ylabel = str(bucket)+" year average percentages"
+    if option ==1:
+        ylabel = "usage of a modal as % of usage of all modals"
+    if option ==2:
+        ylabel = "usage of interrogative modal \nas % of total modal interrogatives"
+    if option == 3:
+        ylabel = "usage of passive modal \nas % of total use of a modal"
+    if option == 4:
+        ylabel = "usage of negative modal \nas % of total use of a modal"
     plotfilename = "-".join(modals) + "-modalshift-opt" + str(option) + ".png"
     scores = score_dict(modals, lines_arr, option)
     score_normalized = PlotHelper.plottable_dict(scores, bucket)

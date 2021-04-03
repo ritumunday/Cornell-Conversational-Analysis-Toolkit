@@ -78,12 +78,20 @@ def main():
     forms = [mv, mv+"ed", mv+"s", mv+"ing"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
 
     verb = {mv: forms}
-
+    if option ==1:
+        ylabel = "specific modal of verb \nas % of all modal usage of verb"
+    if option ==2:
+        ylabel = "specific modal questions of verb \n" \
+                 "as % of all modal questions of verb"
+    if option == 3:
+        ylabel = "modal passives of verb \nas % of all modal usage of verb"
+    if option == 4:
+        ylabel = "modal negatives of verb \nas % of total modal usage of verb"
     title = ", ".join(modals) + " with " + ", ".join(verb.keys()) + '  ModalAndVerbs.py option ' + str(option)
     plotfilename = "-".join(modals) + "_with_" + "-".join(verb.keys()) + "_opt" + str(option) + ".png"
     scoredict = score_dict(modals, lines_arr, verb, option)
     normalized_score = PlotHelper.plottable_dict(scoredict, bucket)
-    PlotHelper.plot_lines(normalized_score, "verb % avg", title, saveplt=saveplt, filename=plotfilename)
+    PlotHelper.plot_lines(normalized_score, ylabel, title, saveplt=saveplt, filename=plotfilename)
 
 
 if __name__ == '__main__':
