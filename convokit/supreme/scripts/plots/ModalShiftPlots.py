@@ -3,7 +3,7 @@ from convokit.supreme.helper.plotHelper import PlotHelper
 
 
 # (option 1) individual modal trends over total modal usage
-# (option 2) individual modal interrogative trends over total interrogative modal usage
+# (option 2) individual modal interrogative trends over total interrogatives
 # (option 3) individual modal passives over total use of respective modal usage
 # (option 4) modal negative usage over total use of respective modal usage
 
