@@ -75,7 +75,7 @@ def main():
         ylabel = "usage of passive modal \nas % of total use of a modal"
     if option == 4:
         ylabel = "usage of negative modal \nas % of total use of a modal"
-    plotfilename = "-".join(modals) + "-modalshift-opt" + str(option) + ".png"
+    plotfilename = "-".join(modals) + "_opt" + str(option) + ".png"
     scores = score_dict(modals, lines_arr, option)
     score_normalized = PlotHelper.plottable_dict(scores, bucket)
     PlotHelper.plot_lines(score_normalized, ylabel, title, saveplt=saveplt, filename=plotfilename)
