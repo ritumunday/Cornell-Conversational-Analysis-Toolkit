@@ -1,8 +1,4 @@
-from convokit import QuestionSentences
-from convokit.supreme.model.saveUtterances import SaveUtterances
-from convokit.supreme.text_processing.modalSentences import ModalSentences
-from convokit.text_processing import TextProcessor
-from convokit.text_processing import TextParser
+from convokit.supreme.helper.saveUtterances import SaveUtterances
 from convokit.supreme.model.supremeCorpus import *
 
 """
