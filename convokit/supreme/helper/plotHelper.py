@@ -27,7 +27,7 @@ class PlotHelper:
         baseline = score_dict.get("baseline")
         subplot_names = baseline.keys()
         pc = {subplt: {} for subplt in subplot_names}
-        for year in range(1956, 2019, bucket):
+        for year in range(1955, 2019, bucket):
             for subplt in subplot_names:
                 tc = 0
                 over = 0
