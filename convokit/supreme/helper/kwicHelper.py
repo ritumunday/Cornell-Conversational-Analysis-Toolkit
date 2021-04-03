@@ -1,7 +1,8 @@
+import csv
 from functools import reduce
 from convokit.phrasing_motifs import QuestionSentences
 from convokit.supreme.text_processing.modalSentences import ModalSentences
-from convokit.text_processing import TextParser, TextToArcs
+from convokit.text_processing import TextParser, TextToArcs, sys
 from convokit.text_processing import TextProcessor
 
 
@@ -36,8 +37,8 @@ class KwicHelper:
 
     def prep_text(self, text):
         text = text.replace('--', '... ')
-        text = text.replace(',', '<comma> ')
-        text = text.replace('"', '<quote> ')
+        text = text.replace(',', ' ')
+        text = text.replace('"', ' ')
         text = text.replace('\n', ' ')
         return text
 
@@ -102,3 +103,16 @@ class KwicHelper:
                         # print("Processed line ", u.id)
                     except Exception as e:
                         print("Exception on line ", u.id, ":", e)
+
+    @classmethod
+    def file_line_list(cls,minyear=1950, maxyear=2020):
+        print("Assembling modal data from files")
+        line_list = []
+        csv.field_size_limit(sys.maxsize)
+        for fileyear in range(minyear, maxyear, 10):
+            csvfile = "../results/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+            with open(csvfile, 'r') as data:
+                for line in csv.DictReader(data):
+                    line_list.append(line)
+        return line_list
+        pass
