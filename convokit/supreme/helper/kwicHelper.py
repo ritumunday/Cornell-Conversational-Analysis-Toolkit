@@ -116,4 +116,3 @@ class KwicHelper:
                 for line in csv.DictReader(data):
                     line_list.append(line)
         return line_list
-        pass
