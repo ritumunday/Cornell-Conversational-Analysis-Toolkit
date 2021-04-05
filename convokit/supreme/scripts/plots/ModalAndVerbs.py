@@ -1,3 +1,6 @@
+import csv
+import sys
+
 from convokit.supreme.helper.kwicHelper import KwicHelper
 from convokit.supreme.helper.plotHelper import PlotHelper
 
@@ -53,45 +56,87 @@ def score_dict(modalnames, linearr, verb, option):
     return {"score": filtered, "baseline": baseline}
 
 
+def loadVerbs():
+    print("loading verbs")
+    line_list = []
+    csv.field_size_limit(sys.maxsize)
+
+    csvfile = "../../results/verblist.csv"
+    with open(csvfile, 'r') as data:
+        for line in csv.DictReader(data):
+            line_list.append(line)
+
+    verbsd = {}
+
+    for v in line_list:
+        entry = list(v.values())
+        mv = entry[0]
+        vf = []
+        for i in range(0, len(entry)):
+            # print(entry[i])
+            vf.append(entry[i])
+        verbsd[mv] = vf
+    return verbsd
+
+
 def main():
     # COMMAND LINE ARGUMENTS
     print("================ Modal Variations Over Time with Main Verb ================")
-    option_ip = input("Enter an option \n"
-                      "(1) usage of main verb with given modal over total modal usage of main verb \n"
-                      "(2) interrogative usage of main verb with given modal over total modal interrogatives of main "
-                      "verb \n"
-                      "(3) passive usage of main verb with given modal over total modal usage of main verb  \n"
-                      "(4) negative usage of main verb with given modal over total modal usage of main verb  \n"
-                      "(Hit enter to use default 1):")
-    modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
-    mv_ip = input("Enter a verb (Default 'ask'):")
-    forms_ip = input("Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
-    bucket_ip = input("Enter number of years to average scores over (Default 4):")
-    saveplt_ip = input("Save plot in a file? 1/0 (Default 0):")
 
-    mv = "ask" if mv_ip == "" else mv_ip
-    modals = ["may", "can"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
-    option = 1 if option_ip == "" else int(option_ip)
-    bucket = 4 if bucket_ip == "" else int(bucket_ip)
-    saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
+    # uncomment below to load from file from results/verblist.csv
+    # verbsd = loadVerbs()
+    # End uncomment
+
+    # Uncomment  for interactive start
+    # option_ip = input("Enter an option \n"
+    #                   "(1) usage of main verb with given modal over total modal usage of main verb \n"
+    #                   "(2) interrogative usage of main verb with given modal over total modal interrogatives of main "
+    #                   "verb \n"
+    #                   "(3) passive usage of main verb with given modal over total modal usage of main verb  \n"
+    #                   "(4) negative usage of main verb with given modal over total modal usage of main verb  \n"
+    #                   "(Hit enter to use default 1):")
+    # modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
+    # mv_ip = input("Enter a verb (Default 'ask'):")
+    # forms_ip = input("Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
+    # bucket_ip = input("Enter number of years to average scores over (Default 10):")
+    # saveplt_ip = input("Save plot in a file? 1/0 (Default 1):")
+
+    # mv = "ask" if mv_ip == "" else mv_ip
+    # modals = ["may", "can"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
+    # option = 1 if option_ip == "" else int(option_ip)
+    # bucket = 10 if bucket_ip == "" else int(bucket_ip)
+    # saveplt = True if saveplt_ip == "" else bool(saveplt_ip)
+    # forms = [mv, mv+"ed", mv+"s", mv+"ing"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
+    # verb = {mv: forms}
+    # Uncomment  for interactive end
+
     lines_arr = KwicHelper.file_line_list()
-    forms = [mv, mv+"ed", mv+"s", mv+"ing"] if forms_ip == "" else [x.strip() for x in forms_ip.split(',')]
 
-    verb = {mv: forms}
-    if option ==1:
+    option = 3
+    modals = ["can", "may", "would", "could", "should"]
+    bucket = 10
+    saveplt = True
+    ylabel = ""
+    if option == 1:
         ylabel = "specific modal of verb \nas % of all modal usage of verb"
-    if option ==2:
+    if option == 2:
         ylabel = "specific modal questions of verb \n" \
                  "as % of all modal questions of verb"
     if option == 3:
         ylabel = "modal passives of verb \nas % of all modal usage of verb"
     if option == 4:
         ylabel = "modal negatives of verb \nas % of total modal usage of verb"
-    title = ", ".join(modals) + " with " + ", ".join(verb.keys()) + '  ModalAndVerbs.py option ' + str(option)
-    plotfilename = "-".join(modals) + "_with_" + "-".join(verb.keys()) + "_opt" + str(option) + ".png"
-    scoredict = score_dict(modals, lines_arr, verb, option)
-    normalized_score = PlotHelper.plottable_dict(scoredict, bucket)
-    PlotHelper.plot_lines(normalized_score, ylabel, title, saveplt=saveplt, filename=plotfilename)
+
+    verbsd = {}
+    verbsd["ask"] = ["ask", "asked", "asking"]
+
+    for verb, forms in verbsd.items():
+        title = ", ".join(modals) + " with " + verb + '  ModalAndVerbs.py option ' + str(option)
+        plotfilename = "-".join(modals) + "_with_" + verb + "_opt" + str(option) + ".png"
+        scoredict = score_dict(modals, lines_arr, {verb: forms}, option)
+        normalized_score = PlotHelper.plottable_dict(scoredict, bucket, step_plot=True)
+        PlotHelper.plot_lines(normalized_score.get("normalized"), ylabel, title, saveplt=saveplt, filename=plotfilename,
+                              raw=normalized_score.get("raw"))
 
 
 if __name__ == '__main__':
