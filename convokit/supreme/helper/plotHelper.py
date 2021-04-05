@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
 
 class PlotHelper:
@@ -22,37 +23,59 @@ class PlotHelper:
         pass
 
     @classmethod
-    def plottable_dict(cls, score_dict, bucket=4):
+    def plottable_dict(cls, score_dict, bucket=4, step_plot=False):
         score = score_dict.get("score")
         baseline = score_dict.get("baseline")
         subplot_names = baseline.keys()
         pc = {subplt: {} for subplt in subplot_names}
-        for year in range(1955, 2019, bucket):
+        raw = {subplt: {} for subplt in subplot_names}
+        for year in range(1959, 2019, bucket):
             for subplt in subplot_names:
                 tc = 0
                 over = 0
-                for mc in range(year, year + bucket):
+                r = 0
+                b = 0
+                for y in range(year, year + bucket):
                     # Add percentages over the bucket
-                    if baseline[subplt].get(mc) is not None and score[subplt].get(mc) is not None:
+                    if baseline[subplt].get(y) is not None:
                         over += 1
-                        tc = tc + ((score[subplt][mc] / baseline[subplt][mc]) * 100)
-                if tc > 0:
-                    # get average over the bucket
-                    pc[subplt][year] = tc / over
+                        b = b + baseline[subplt][y]
+                        if score[subplt].get(y) is not None:
+                            r = r + score[subplt][y]
+                if r > 0 and b >0:
+                    # get percent over the bucket
+                    tc =((r/b) * 100)
+
+                    pc[subplt][year] = tc
                 else:
                     pc[subplt][year] = 0
-        return pc
+                raw[subplt][year] = {"ct": r, "over": b}
+                if step_plot:
+                    for y1 in range(year, year + bucket):
+                        pc[subplt][y1] = pc[subplt][year]
+                        raw[subplt][y1] = {"ct": r, "over": b}
+
+        return {"normalized": pc, "raw": raw}
 
     @classmethod
-    def plot_lines(cls, dict_of_dicts, ylabel="", title="", saveplt=False, showPlt=True, filename=None):
+    def plot_lines(cls, dict_of_dicts, ylabel="", title="", saveplt=False, showPlt=True, filename=None, raw=None,bucket=10):
         fig, ax = plt.subplots()
         for k, v in dict_of_dicts.items():
-            ax.plot(v.keys(), v.values(), label=k)
+            ax.plot(v.keys(), v.values(), label=k, markevery=2)
+            ax.xaxis.set_major_locator(MultipleLocator(10))
+            for x, y in v.items():
+                if(x%bucket==0):
+                    label = str(round(raw.get(k).get(x).get("ct")))+" of "+str((raw.get(k).get(x).get("over")))
+
+                    plt.annotate(label,  # this is the text
+                                 (x, y),
+                                 ha="center")
+
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.legend()
         filepath = cls.filedir + (
-            datetime.now().isoformat()) + ".png" if filename is None else   cls.filedir + filename
+            datetime.now().isoformat()) + ".png" if filename is None else cls.filedir + filename
         if saveplt:
             plt.savefig(filepath, bbox_inches='tight')
         if showPlt:
