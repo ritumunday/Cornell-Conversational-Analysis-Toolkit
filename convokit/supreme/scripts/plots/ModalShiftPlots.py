@@ -52,16 +52,17 @@ def main():
                       "(4) modal negative usage over total use of respective modal usage \n"
                       "(Hit enter to use default 1):")
     modals_ip = input("Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, would, may'):")
-    bucket_ip = input("Enter number of years to average scores over (Hit enter to use default 4):")
-    saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 0):")
+    bucket_ip = input("Enter number of years to average scores over (Hit enter to use default 10):")
+    saveplt_ip = input("Save plot in a file? 1/0 (Hit enter to use default 1):")
 
-    modals = ["may", "would","can" ] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
+    modals = ["may","can"] if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = 1 if option_ip == "" else int(option_ip)
-    bucket = 4 if bucket_ip == "" else int(bucket_ip)
-    saveplt = False if saveplt_ip == "" else bool(saveplt_ip)
+    bucket = 10 if bucket_ip == "" else int(bucket_ip)
+    saveplt = True if saveplt_ip == "" else bool(saveplt_ip)
 
     lines_arr = KwicHelper.file_line_list()
     title = ", ".join(modals) + '  ModalshiftPlots.py option ' + str(option)
+    ylabel = ""
     if option ==1:
         ylabel = "usage of a modal as % of usage of all modals"
     if option ==2:
@@ -72,8 +73,8 @@ def main():
         ylabel = "usage of negative modal \nas % of total use of a modal"
     plotfilename = "-".join(modals) + "_opt" + str(option) + ".png"
     scores = score_dict(modals, lines_arr, option)
-    score_normalized = PlotHelper.plottable_dict(scores, bucket)
-    PlotHelper.plot_lines(score_normalized, ylabel, title, saveplt=saveplt, filename=plotfilename)
+    score_normalized = PlotHelper.plottable_dict(scores, bucket,step_plot=True)
+    PlotHelper.plot_lines(score_normalized.get("normalized"), ylabel, title, saveplt=saveplt, filename=plotfilename, raw=score_normalized.get("raw"))
 
 
 if __name__ == '__main__':
