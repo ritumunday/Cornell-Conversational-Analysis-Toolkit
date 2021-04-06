@@ -79,9 +79,9 @@ def main():
     print("================ Modal Variations Over Time with Main Verb ================")
 
     option1 = "Comparative choice of modals with verb"
-    option2 = "Comparative choice of modals with verb in questions"
-    option3 = "Comparative choice of passive verb with modals"
-    option4 = "Comparative choice of negative verb with modals"
+    option2 = "Comparative choice of modals with verb in interrogative"
+    option3 = "Comparative choice of modal with passive verb"
+    option4 = "Comparative choice of negative modal with verb"
     # defaults
     # modals = ["can", "may", "would", "could", "should"]
     modals =["can", "may"]
@@ -99,7 +99,7 @@ def main():
     option_ip = input("Enter an option \n"
                       "Option 1: " + option1 + "\n" +
                       "Option 2: " + option2 + "\n" +
-                      "Option 3: " + option3 + "\n" +
+                      # "Option 3: " + option3 + "\n" +
                       "Option 4: " + option4 + "\n" +
                       "(Hit enter to use default 1):")
     modals_ip = input(
