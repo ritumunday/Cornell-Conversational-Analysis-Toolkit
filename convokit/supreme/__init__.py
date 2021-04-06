@@ -1,1 +1,1 @@
-from convokit.supreme.model.supremeCorpus import SupremeCorpus
+from convokit.supreme.model.SupremeCorpus import SupremeCorpus
