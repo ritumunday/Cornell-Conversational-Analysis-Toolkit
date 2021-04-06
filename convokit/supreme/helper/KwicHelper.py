@@ -107,7 +107,7 @@ class KwicHelper:
 
     @classmethod
     def file_line_list(cls,minyear=1950, maxyear=2020):
-        print("Assembling modal data from files")
+        print("Assembling modal KWIC data...")
         line_list = []
         csv.field_size_limit(sys.maxsize)
         for fileyear in range(minyear, maxyear, 10):

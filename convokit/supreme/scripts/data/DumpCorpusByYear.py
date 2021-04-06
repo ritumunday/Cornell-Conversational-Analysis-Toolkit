@@ -1,4 +1,4 @@
-from convokit.supreme.helper.saveUtterances import SaveUtterances
+from convokit.supreme.helper.SaveUtterances import SaveUtterances
 from convokit.supreme.model.supremeCorpus import *
 
 """

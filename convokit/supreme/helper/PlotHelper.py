@@ -23,7 +23,7 @@ class PlotHelper:
         pass
 
     @classmethod
-    def plottable_dict(cls, score_dict, bucket=4, step_plot=False):
+    def get_normalized_scores(cls, score_dict, bucket=4, step_plot=False):
         score = score_dict.get("score")
         baseline = score_dict.get("baseline")
         subplot_names = baseline.keys()
@@ -64,7 +64,7 @@ class PlotHelper:
             ax.plot(v.keys(), v.values(), label=k, markevery=2)
             ax.xaxis.set_major_locator(MultipleLocator(10))
             for x, y in v.items():
-                if(x%bucket==0):
+                if x%bucket==0:
                     label = str(round(raw.get(k).get(x).get("ct")))+" of "+str((raw.get(k).get(x).get("over")))
 
                     plt.annotate(label,  # this is the text

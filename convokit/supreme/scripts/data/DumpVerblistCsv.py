@@ -93,11 +93,11 @@ def plotyears(modalnames, bucket, verb, index):
 
 
 bucket = 4
-modals = ["may" ]
+modals = ["can" ]
 
 all_dictionary = plotyears(modals, bucket, "ask",8)
 
-csvfile =  '../results/' + "may-verbs.csv"
+csvfile =  '../results/' + "can-verbs.csv"
 separator = ","
 
 ft = open(csvfile, "w")
