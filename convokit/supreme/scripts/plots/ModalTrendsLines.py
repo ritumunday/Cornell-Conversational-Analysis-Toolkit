@@ -2,7 +2,7 @@ from convokit.supreme.helper.KwicHelper import KwicHelper
 from convokit.supreme.helper.PlotHelper import PlotHelper
 
 
-def get_score_dict(modal_names, kwic_line_list, option):
+def get_yearly_scores(modal_names, kwic_line_list, option):
     filtered = {mod: {} for mod in modal_names}
     baseline = {mod: {} for mod in modal_names}
 
@@ -74,7 +74,7 @@ def main():
 
     plot_filename = "-".join(modals) + "_opt" + str(option) + ".png"
     print("Finding scores...")
-    score_dict = get_score_dict(modals, modal_kwics_list, option)
+    score_dict = get_yearly_scores(modals, modal_kwics_list, option)
     print("Normalizing scores...")
 
     normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)

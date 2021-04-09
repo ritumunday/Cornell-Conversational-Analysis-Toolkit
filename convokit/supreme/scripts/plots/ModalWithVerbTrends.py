@@ -5,7 +5,7 @@ from convokit.supreme.helper.KwicHelper import KwicHelper
 from convokit.supreme.helper.PlotHelper import PlotHelper
 
 
-def get_score_dict(modal_list, kwic_line_list, verb, option):
+def get_yearly_scores(modal_list, kwic_line_list, verb, option):
     filtered = {mod: {} for mod in modal_list}
     baseline = {mod: {} for mod in modal_list}
 
@@ -84,17 +84,17 @@ def main():
     option4 = "Comparative choice of negative modal with verb"
     # defaults
     # modals = ["can", "may", "would", "could", "should"]
-    modals =["can", "may"]
+    modals = ["can", "may"]
     option = 1
     bucket = 10
     save_plot = True
     input_verb_forms = {"ask": ["ask", "asked", "asking"]}
 
-    # uncomment below to load from verb file from results/verblist.csv
+    # START uncomment below to load from verb file from results/verblist.csv
     # input_verb_forms = load_verbs()
-    # End uncomment
+    # END uncomment for verblist file
 
-    # Uncomment for interactive input
+    # START Uncomment for interactive input
     # inputs
     option_ip = input("Enter an option \n"
                       "Option 1: " + option1 + "\n" +
@@ -122,7 +122,7 @@ def main():
         else:
             forms = [x.strip() for x in forms_ip.split(',')]
         input_verb_forms = {main_verb: forms}
-    # Uncomment for interactive end
+    # END Uncomment for interactive
 
     modal_kwics_list = KwicHelper.file_line_list()
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
@@ -130,15 +130,15 @@ def main():
     for verb, forms in input_verb_forms.items():
         title = ", ".join(modals) + " with " + verb + '  ModalWithVerbTrends.py option ' + str(option)
         plot_filename = "-".join(modals) + "_with_" + verb + "_opt" + str(option) + ".png"
-        print("Finding scores for '" + verb+"'...")
-        score_dict = get_score_dict(modals, modal_kwics_list, {verb: forms}, option)
+        print("Finding scores for '" + verb + "'...")
+        score_dict = get_yearly_scores(modals, modal_kwics_list, {verb: forms}, option)
         print("Normalizing scores...")
         normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
         print("Plotting scores...")
         PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
                               filename=plot_filename,
                               raw=normalized_scores.get("raw"))
-        print("Finished '" + verb+"'.")
+        print("Finished '" + verb + "'.")
 
 
 if __name__ == '__main__':
