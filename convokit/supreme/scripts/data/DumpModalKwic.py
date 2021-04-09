@@ -15,9 +15,9 @@ Change CONVOKIT_HOME to your default convokit home directory.
 
 
 def main():
+    # fixme use os pwd relative
     CONVOKIT_HOME = "/Users/rmundhe/.convokit"
     ROOT_DIR = CONVOKIT_HOME + "/downloads/supreme-corpus"
-
 
     full_cmd_arguments = sys.argv
     argument_list = full_cmd_arguments[1:]
@@ -35,19 +35,19 @@ def main():
     minyear = year if ((minyear is None) and (year is not None)) else minyear
     maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
 
-    uttfile = os.path.abspath("..") + "/../results/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"
+    utterance_json = os.path.abspath("..") + "/../results/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"
 
-    if os.path.exists(uttfile) == False:
-        SaveUtterances(maxyear, minyear,  utterance_end_index)
+    if not os.path.exists(utterance_json):
+        SaveUtterances(maxyear, minyear, utterance_end_index)
 
     print("Initializing corpus")
-    corpus = SupremeCorpus(maxyear, minyear, dirname=ROOT_DIR, uttfile=uttfile)
+    corpus = SupremeCorpus(maxyear, minyear, dirname=ROOT_DIR, uttfile=utterance_json)
     print("Corpus initialized")
-     # ----------------------------------------------------------------------------------------------------------------
-    separator = ","
-    resultfile = "../results/kwic" +str(corpus.meta['minyear'])+"-"+str(corpus.meta['maxyear']) + ".csv"
     # ----------------------------------------------------------------------------------------------------------------
-    KwicHelper(corpus, separator, resultfile)
+    separator = ","
+    result_file = "../results/kwic" + str(corpus.meta['minyear']) + "-" + str(corpus.meta['maxyear']) + ".csv"
+    # ----------------------------------------------------------------------------------------------------------------
+    KwicHelper(corpus, separator, result_file)
 
 
 if __name__ == '__main__':

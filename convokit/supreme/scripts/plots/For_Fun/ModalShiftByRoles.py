@@ -26,7 +26,7 @@ def plotyears(modalnames, bucket, verb):
         year = int(l.get("Year"))
 
         # #   usage  of given modals as percentage of total modal usage
-        # for mod in modalnames:
+        # for mod in modal_names:
         #     if l.get("Mod").lower() == mod.lower():  # simple filter
         #         filtered[mod][year] = 1 if filtered[mod].get(year) is None else filtered[mod][year] + 1
         #     baseline[mod][year] = 1 if baseline[mod].get(year) is None else baseline[mod][year] + 1
@@ -39,7 +39,7 @@ def plotyears(modalnames, bucket, verb):
                 baseline[mod][year] = 1 if baseline[mod].get(year) is None else baseline[mod][year] + 1
 
         # usage  of given modals with a certain verb as percentage of total modal usages of that verb
-        # for mod in modalnames:
+        # for mod in modal_names:
         #     if l.get("Main Verb").lower() == verb.lower():
         #         if l.get("Mod").lower() == mod.lower():
         #             filtered[mod][year] = 1 if filtered[mod].get(year) is None else filtered[mod][year] + 1

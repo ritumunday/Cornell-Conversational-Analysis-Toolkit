@@ -27,6 +27,5 @@ def main():
     SaveUtterances(maxyear, minyear, utterance_end_index)
 
 
-
 if __name__ == '__main__':
     main()

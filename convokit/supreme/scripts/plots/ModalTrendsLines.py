@@ -2,15 +2,15 @@ from convokit.supreme.helper.KwicHelper import KwicHelper
 from convokit.supreme.helper.PlotHelper import PlotHelper
 
 
-def get_score_dict(modalnames, linearr, option):
-    filtered = {mod: {} for mod in modalnames}
-    baseline = {mod: {} for mod in modalnames}
+def get_score_dict(modal_names, kwic_line_list, option):
+    filtered = {mod: {} for mod in modal_names}
+    baseline = {mod: {} for mod in modal_names}
 
     # filter lines
-    for l in linearr:
+    for l in kwic_line_list:
         year = int(l.get("Year"))
 
-        for mod in modalnames:
+        for mod in modal_names:
             if option == 1:
                 if l.get("Mod").lower() == mod.lower():
                     filtered[mod][year] = 1 if filtered[mod].get(year) is None else filtered[mod][year] + 1

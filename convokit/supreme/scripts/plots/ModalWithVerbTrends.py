@@ -5,12 +5,12 @@ from convokit.supreme.helper.KwicHelper import KwicHelper
 from convokit.supreme.helper.PlotHelper import PlotHelper
 
 
-def get_score_dict(modalnames, linearr, verb, option):
-    filtered = {mod: {} for mod in modalnames}
-    baseline = {mod: {} for mod in modalnames}
+def get_score_dict(modal_list, kwic_line_list, verb, option):
+    filtered = {mod: {} for mod in modal_list}
+    baseline = {mod: {} for mod in modal_list}
 
     # filter lines
-    for line in linearr:
+    for line in kwic_line_list:
         year = int(line.get("Year"))
 
         matched_mv = False
@@ -23,7 +23,7 @@ def get_score_dict(modalnames, linearr, verb, option):
         is_passive = True if (line.get("Passive") == "1") else False
         is_negative = True if (line.get("After").startswith("n't") or line.get("After").startswith("not")) else False
 
-        for mod in modalnames:
+        for mod in modal_list:
             matched_mod = True if line.get("Mod").lower().strip() == mod.lower().strip() else False
             if option == 1:
                 if matched_mod and matched_mv:
@@ -57,8 +57,8 @@ def load_verbs():
     line_list = []
     csv.field_size_limit(sys.maxsize)
 
-    csvfile = "../../results/verblist.csv"
-    with open(csvfile, 'r') as data:
+    csv_file = "../../results/verblist.csv"
+    with open(csv_file, 'r') as data:
         for line in csv.DictReader(data):
             line_list.append(line)
 

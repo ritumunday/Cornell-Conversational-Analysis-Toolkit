@@ -1,6 +1,21 @@
 from convokit.text_processing import TextProcessor
 
 
+def _get_modal_sentences(text_entry, aux_input):
+    text = text_entry[aux_input['input_field']]
+    parse = text_entry[aux_input['filter_field']]
+    for input_sent, filter_sent in zip(text, parse):
+        parsed_sentence = filter_sent
+        # Find modal and main verb in the sentence
+        if len(parsed_sentence):
+            for tokenized in parsed_sentence["toks"]:
+                # word
+                if tokenized["tag"] == "MD":
+                    return 1
+
+    return 0
+
+
 class ModalSentences(TextProcessor):
     """
         Transformer that, given a list of sentences, returns a list containing only sentences with modals.
@@ -21,20 +36,6 @@ class ModalSentences(TextProcessor):
         aux_input = {'input_field': input_field,
                      'filter_field': filter_field, 'use_caps': use_caps}
 
-        TextProcessor.__init__(self, self._get_modal_sentences, output_field=output_field,
+        TextProcessor.__init__(self, _get_modal_sentences, output_field=output_field,
                                input_field=[input_field, filter_field], input_filter=input_filter, aux_input=aux_input,
                                verbosity=verbosity)
-
-    def _get_modal_sentences(self, text_entry, aux_input):
-        text = text_entry[aux_input['input_field']]
-        parse = text_entry[aux_input['filter_field']]
-        for input_sent, filter_sent in zip(text, parse):
-            parsedsent = filter_sent
-            # Find modal and main verb in the sentence
-            if len(parsedsent):
-                for tokenized in parsedsent["toks"]:
-                    # word
-                    if tokenized["tag"] == "MD":
-                        return 1
-
-        return 0
