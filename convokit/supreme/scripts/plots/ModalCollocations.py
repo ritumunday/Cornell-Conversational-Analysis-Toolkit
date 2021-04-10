@@ -47,18 +47,17 @@ def main():
     modal_kwics_list = KwicHelper.file_line_list()
     y_label = option1
 
-    for verb, forms in input_verb_forms.items():
-        title = ", ".join(modals) + " with " + keyword + '  ModalWithVerbTrends.py option ' + str(option)
-        plot_filename = "collocation-"+"-".join(modals) + "_with_" + keyword + "_opt" + str(option) + ".png"
-        print("Finding scores for '" + keyword + "'...")
-        score_dict = get_yearly_scores(modals, modal_kwics_list, keyword, option)
-        print("Normalizing scores...")
-        normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
-        print("Plotting scores...")
-        PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
-                              filename=plot_filename,
-                              raw=normalized_scores.get("raw"))
-        print("Finished '" + keyword + "'.")
+    title = ", ".join(modals) + " with " + keyword + '  ModalWithVerbTrends.py option ' + str(option)
+    plot_filename = "collocation-"+"-".join(modals) + "_with_" + keyword + "_opt" + str(option) + ".png"
+    print("Finding scores for '" + keyword + "'...")
+    score_dict = get_yearly_scores(modals, modal_kwics_list, keyword, option)
+    print("Normalizing scores...")
+    normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
+    print("Plotting scores...")
+    PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
+                          filename=plot_filename,
+                          raw=normalized_scores.get("raw"))
+    print("Finished '" + keyword + "'.")
 
 
 if __name__ == '__main__':
