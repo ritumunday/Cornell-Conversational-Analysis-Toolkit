@@ -35,7 +35,7 @@ def main():
     minyear = year if ((minyear is None) and (year is not None)) else minyear
     maxyear = year if ((maxyear is None) and (year is not None)) else maxyear
 
-    utterance_json = os.path.abspath("..") + "/../results/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"
+    utterance_json = os.path.abspath("..") + "/../../results/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"
 
     if not os.path.exists(utterance_json):
         SaveUtterances(maxyear, minyear, utterance_end_index)
@@ -45,7 +45,7 @@ def main():
     print("Corpus initialized")
     # ----------------------------------------------------------------------------------------------------------------
     separator = ","
-    result_file = "../results/kwic" + str(corpus.meta['minyear']) + "-" + str(corpus.meta['maxyear']) + ".csv"
+    result_file = "../../results/kwic" + str(corpus.meta['minyear']) + "-" + str(corpus.meta['maxyear']) + ".csv"
     # ----------------------------------------------------------------------------------------------------------------
     KwicHelper(corpus, separator, result_file)
 

@@ -9,7 +9,7 @@ def get_file_list():
     linearr = []
     csv.field_size_limit(sys.maxsize)
     for fileyear in range(1950, 2020, 10):
-        csvfile = "../results/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+        csvfile = "../../results/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
         with open(csvfile, 'r') as data:
             for line in csv.DictReader(data):
                 linearr.append(line)
@@ -25,8 +25,7 @@ def make_plot_dict(modal_list):
     # filter lines
     for l in linearr:
         year = int(l.get("Year"))
-        if year == 2013:
-            print("hi")
+
         # #   usage  of given modals as percentage of total modal usage
         # for mod in modal_names:
         #     if l.get("Mod").lower() == mod.lower():  # simple filter
@@ -35,7 +34,7 @@ def make_plot_dict(modal_list):
         #
         #    usage  of given modals as interrogative as percentage of total interrogative modal usage
         for mod in modal_list:
-            if l.get("Mod").lower().strip() == mod.lower().strip() and l.get("Interrogative") == "1":
+            if l.get("Mod").lower().strip() == mod.lower().strip():
                 mv = l.get("Main Verb").lower().strip()
                 if filtered.get(year) is None:
                     filtered[year] = {}
@@ -52,7 +51,7 @@ def make_plot_dict(modal_list):
         ctdict.pop('get', None)
         ctdict.pop('comma', None)
 
-        # ctdict = {k: v for k, v in sorted(ctdict.items(), key=lambda item: item[1],reverse=True)}
+        ctdict = {k: v for k, v in sorted(ctdict.items(), key=lambda item: item[1], reverse=True)}
         # filtered[yr] =  dict(itertools.islice(ctdict.items(), 3))
         filtered[yr] = ctdict
         print(yr, " - ", filtered[yr])
@@ -62,7 +61,8 @@ def make_plot_dict(modal_list):
         print(y, " - ", res)
     ret = {}
     for year in range(1956, 2019):
-        ret[year] = res[year]
+        if res.get(year) is not None:
+            ret[year] = res[year]
 
     return ret
 
@@ -72,7 +72,7 @@ modals = ["can"]
 
 all_dictionary = make_plot_dict(modals)
 
-csvfile = '../results/' + "can-verbs.csv"
+csvfile = '../../results/' + "can-verbs.csv"
 separator = ","
 
 ft = open(csvfile, "w")
@@ -87,6 +87,9 @@ for y, v in all_dictionary.items():
     #         arrs.append(0)
     #     else:
     #         arrs.append("unknown")
-    fileline = str(y) + "," + ",".join(v.keys()) + "\n"
+    lst = []
+    for k, v in v.items():
+        lst.append(k + " n=" + str(v))
+    fileline = str(y) + "," + ",".join(lst) + "\n"
     ft.write(fileline)
 ft.close()

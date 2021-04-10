@@ -19,9 +19,9 @@ class SaveUtterances(Corpus):
         print("initializing sample corpus.")
         corpus = SupremeCorpus(maxyear, minyear, utterance_end_index=utterance_end_index, dirname=ROOT_DIR )
         print("corpus initialized")
-        fraw = open("../results/raw.txt", "w")
+        fraw = open("../../results/raw.txt", "w")
         fjson = open(
-            "../results/utterances" + str(corpus.meta['minyear']) + "-" + str(corpus.meta['maxyear']) + ".jsonl",
+            "../../results/utterances" + str(corpus.meta['minyear']) + "-" + str(corpus.meta['maxyear']) + ".jsonl",
             "w")
         # ----------------------------------------------------------------------------------------------------------------
         # Process by utterance instead of whole corpus for efficiency over subset of utterances

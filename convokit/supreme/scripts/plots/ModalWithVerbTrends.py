@@ -95,7 +95,7 @@ def main():
     # END uncomment for verblist file
 
     # START Uncomment for interactive input
-    # inputs
+
     option_ip = input("Enter an option \n"
                       "Option 1: " + option1 + "\n" +
                       "Option 2: " + option2 + "\n" +
@@ -109,8 +109,7 @@ def main():
         "Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
     bucket_ip = input("Enter number of years to average scores over (Default 10):")
     save_plot_ip = input("Save plot in a file? 1/0 (Default 1):")
-    # end inputs
-    # convert inputs
+
     modals = modals if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
     option = option if option_ip == "" else int(option_ip)
     bucket = bucket if bucket_ip == "" else int(bucket_ip)
