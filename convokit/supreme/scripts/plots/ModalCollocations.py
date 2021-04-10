@@ -49,7 +49,7 @@ def main():
 
     for verb, forms in input_verb_forms.items():
         title = ", ".join(modals) + " with " + keyword + '  ModalWithVerbTrends.py option ' + str(option)
-        plot_filename = "-".join(modals) + "_with_" + verb + "_opt" + str(option) + ".png"
+        plot_filename = "collocation-"+"-".join(modals) + "_with_" + keyword + "_opt" + str(option) + ".png"
         print("Finding scores for '" + keyword + "'...")
         score_dict = get_yearly_scores(modals, modal_kwics_list, keyword, option)
         print("Normalizing scores...")
