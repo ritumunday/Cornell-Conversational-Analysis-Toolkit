@@ -74,7 +74,7 @@ class PlotHelper:
         ax.legend()
         filepath = cls.filedir + (
             datetime.now().isoformat()) + ".png" if filename is None else cls.filedir + filename
-        if saveplt:
+        if save_plot:
             plt.savefig(filepath, bbox_inches='tight')
-        if showPlt:
+        if show_plot:
             plt.show()
