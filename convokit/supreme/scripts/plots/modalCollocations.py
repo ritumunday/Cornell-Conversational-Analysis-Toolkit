@@ -1,4 +1,4 @@
-from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.model import sentenceCorpus
 from convokit.supreme.helper.plotHelper import PlotHelper
 
 
@@ -44,7 +44,7 @@ def main():
         exit(0)
     # END Uncomment for interactive
 
-    modal_kwics_list = KwicHelper.file_line_list()
+    modal_kwics_list = sentenceCorpus.file_line_list()
     y_label = option1
 
     title = ", ".join(modals) + " with " + keyword + '  modalWithVerbTrends.py option ' + str(option)
@@ -54,7 +54,7 @@ def main():
     print("Normalizing scores...")
     normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
     print("Plotting scores...")
-    PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
+    PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, save_plot=save_plot,
                           filename=plot_filename,
                           raw=normalized_scores.get("raw"))
     print("Finished '" + keyword + "'.")

@@ -2,7 +2,9 @@ import csv
 import itertools
 import sys
 
-import matplotlib.pyplot as plt
+"""
+Script dumps verb csv. Contains top 20 verbs for given modal for each year. 
+"""
 
 
 def get_file_list():
@@ -16,7 +18,7 @@ def get_file_list():
     return linearr
 
 
-def make_plot_dict(modal_list):
+def get_verbs(modal_list):
     print("Assembling   modal data from files")
     linearr = get_file_list()
     filtered = {}
@@ -25,14 +27,6 @@ def make_plot_dict(modal_list):
     # filter lines
     for l in linearr:
         year = int(l.get("Year"))
-
-        # #   usage  of given modals as percentage of total modal usage
-        # for mod in modal_names:
-        #     if l.get("Mod").lower() == mod.lower():  # simple filter
-        #         filtered[mod][year] = 1 if filtered[mod].get(year) is None else filtered[mod][year] + 1
-        #     baseline[mod][year] = 1 if baseline[mod].get(year) is None else baseline[mod][year] + 1
-        #
-        #    usage  of given modals as interrogative as percentage of total interrogative modal usage
         for mod in modal_list:
             if l.get("Mod").lower().strip() == mod.lower().strip():
                 mv = l.get("Main Verb").lower().strip()
@@ -43,16 +37,8 @@ def make_plot_dict(modal_list):
     for yr, ctdict in filtered.items():
         ctdict.pop('be', None)
         ctdict.pop('have', None)
-        ctdict.pop('make', None)
-        ctdict.pop('do', None)
-        # ctdict.pop('come', None)
-        # ctdict.pop('go', None)
-        # ctdict.pop('say', None)
-        ctdict.pop('get', None)
         ctdict.pop('comma', None)
-
         ctdict = {k: v for k, v in sorted(ctdict.items(), key=lambda item: item[1], reverse=True)}
-        # filtered[yr] =  dict(itertools.islice(ctdict.items(), 3))
         filtered[yr] = ctdict
         print(yr, " - ", filtered[yr])
     res = {}
@@ -67,26 +53,15 @@ def make_plot_dict(modal_list):
     return ret
 
 
-bucket = 4
 modals = ["can"]
 
-all_dictionary = make_plot_dict(modals)
+all_dictionary = get_verbs(modals)
 
 csvfile = '../../results/' + "can-verbs.csv"
 separator = ","
 
 ft = open(csvfile, "w")
-# posarr = getposarr()
-# negarr = getnegarr()
 for y, v in all_dictionary.items():
-    # arrs = []
-    # for k in v.keys():
-    #     if k in posarr:
-    #         arrs.append(1)
-    #     elif k in negarr:
-    #         arrs.append(0)
-    #     else:
-    #         arrs.append("unknown")
     lst = []
     for k, v in v.items():
         lst.append(k + " n=" + str(v))

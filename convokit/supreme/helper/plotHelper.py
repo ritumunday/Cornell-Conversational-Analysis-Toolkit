@@ -27,45 +27,43 @@ class PlotHelper:
         score = score_dict.get("score")
         baseline = score_dict.get("baseline")
         subplot_names = baseline.keys()
-        pc = {subplt: {} for subplt in subplot_names}
+        ratio = {subplt: {} for subplt in subplot_names}
         raw = {subplt: {} for subplt in subplot_names}
         for year in range(1959, 2019, bucket):
             for subplt in subplot_names:
-                tc = 0
                 over = 0
-                r = 0
-                b = 0
+                filterct = 0
+                basect = 0
                 for y in range(year, year + bucket):
                     # Add percentages over the bucket
                     if baseline[subplt].get(y) is not None:
                         over += 1
-                        b = b + baseline[subplt][y]
+                        basect = basect + baseline[subplt][y]
                         if score[subplt].get(y) is not None:
-                            r = r + score[subplt][y]
-                if r > 0 and b >0:
+                            filterct = filterct + score[subplt][y]
+                if filterct > 0 and basect > 0:
                     # get percent over the bucket
-                    tc =((r/b) * 100)
-
-                    pc[subplt][year] = tc
+                    ratio[subplt][year] = ((filterct / basect) * 100)
                 else:
-                    pc[subplt][year] = 0
-                raw[subplt][year] = {"ct": r, "over": b}
+                    ratio[subplt][year] = 0
+                raw[subplt][year] = {"ct": filterct, "over": basect}
                 if step_plot:
                     for y1 in range(year, year + bucket):
-                        pc[subplt][y1] = pc[subplt][year]
-                        raw[subplt][y1] = {"ct": r, "over": b}
+                        ratio[subplt][y1] = ratio[subplt][year]
+                        raw[subplt][y1] = {"ct": filterct, "over": basect}
 
-        return {"normalized": pc, "raw": raw}
+        return {"normalized": ratio, "raw": raw}
 
     @classmethod
-    def plot_lines(cls, dict_of_dicts, ylabel="", title="", saveplt=False, showPlt=True, filename=None, raw=None,bucket=10):
+    def plot_lines(cls, dict_of_dicts, ylabel="", title="", save_plot=False, show_plot=True, filename=None, raw=None,
+                   bucket=10):
         fig, ax = plt.subplots()
         for k, v in dict_of_dicts.items():
             ax.plot(v.keys(), v.values(), label=k, markevery=2)
             ax.xaxis.set_major_locator(MultipleLocator(10))
             for x, y in v.items():
-                if x%bucket==0:
-                    label = str(round(raw.get(k).get(x).get("ct")))+" of "+str((raw.get(k).get(x).get("over")))
+                if x % bucket == 0:
+                    label = str(round(raw.get(k).get(x).get("ct"))) + " of " + str((raw.get(k).get(x).get("over")))
 
                     plt.annotate(label,  # this is the text
                                  (x, y),

@@ -1,5 +1,5 @@
-from convokit.supreme.helper.kwicHelper import KwicHelper
 from convokit.supreme.helper.plotHelper import PlotHelper
+from convokit.supreme.model import sentenceCorpus
 
 
 def get_yearly_scores(modal_names, kwic_line_list, option):
@@ -68,7 +68,7 @@ def main():
     bucket = bucket if bucket_ip == "" else int(bucket_ip)
     save_plot = save_plot if save_plot_ip == "" else bool(save_plot_ip)
 
-    modal_kwics_list = KwicHelper.file_line_list()
+    modal_kwics_list = sentenceCorpus.file_line_list()
     title = ", ".join(modals) + '  modalTrendsLines.py option ' + str(option)
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
@@ -79,7 +79,7 @@ def main():
 
     normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
     print("Plotting scores...")
-    PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
+    PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, save_plot=save_plot,
                           filename=plot_filename,
                           raw=normalized_scores.get("raw"))
     print("Finished.")

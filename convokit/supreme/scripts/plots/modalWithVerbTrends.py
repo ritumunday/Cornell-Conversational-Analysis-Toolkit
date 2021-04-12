@@ -1,7 +1,7 @@
 import csv
 import sys
 
-from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.model import sentenceCorpus
 from convokit.supreme.helper.plotHelper import PlotHelper
 
 
@@ -123,7 +123,7 @@ def main():
         input_verb_forms = {main_verb: forms}
     # END Uncomment for interactive
 
-    modal_kwics_list = KwicHelper.file_line_list()
+    modal_kwics_list = sentenceCorpus.file_line_list()
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     for verb, forms in input_verb_forms.items():
@@ -134,7 +134,7 @@ def main():
         print("Normalizing scores...")
         normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
         print("Plotting scores...")
-        PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, saveplt=save_plot,
+        PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, save_plot=save_plot,
                               filename=plot_filename,
                               raw=normalized_scores.get("raw"))
         print("Finished '" + verb + "'.")
