@@ -36,18 +36,16 @@ def main():
     option = 1
     bucket = 10
     save_plot = True
-    input_verb_forms = {"ask": ["ask", "asked", "asking"]}
 
     keyword = input("Enter keyword:")
     if keyword == '':
         print("Please enter a keyword to collocate with modals")
         exit(0)
-    # END Uncomment for interactive
 
     modal_kwics_list = sentenceCorpus.file_line_list()
     y_label = option1
 
-    title = ", ".join(modals) + " with " + keyword + '  modalWithVerbTrends.py option ' + str(option)
+    title = ", ".join(modals) + " with " + keyword + '  modalCollocations.py'
     plot_filename = "collocation-"+"-".join(modals) + "_with_" + keyword + "_opt" + str(option) + ".png"
     print("Finding scores for '" + keyword + "'...")
     score_dict = get_yearly_scores(modals, modal_kwics_list, keyword, option)
