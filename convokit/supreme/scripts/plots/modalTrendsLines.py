@@ -1,5 +1,5 @@
-from convokit.supreme.helper.KwicHelper import KwicHelper
-from convokit.supreme.helper.PlotHelper import PlotHelper
+from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.helper.plotHelper import PlotHelper
 
 
 def get_yearly_scores(modal_names, kwic_line_list, option):
@@ -69,7 +69,7 @@ def main():
     save_plot = save_plot if save_plot_ip == "" else bool(save_plot_ip)
 
     modal_kwics_list = KwicHelper.file_line_list()
-    title = ", ".join(modals) + '  ModalTrendsLines.py option ' + str(option)
+    title = ", ".join(modals) + '  modalTrendsLines.py option ' + str(option)
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     plot_filename = "-".join(modals) + "_opt" + str(option) + ".png"

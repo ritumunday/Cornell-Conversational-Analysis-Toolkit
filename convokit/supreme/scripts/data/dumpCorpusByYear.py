@@ -1,5 +1,5 @@
-from convokit.supreme.helper.SaveUtterances import SaveUtterances
-from convokit.supreme.model.SupremeCorpus import *
+from convokit.supreme.helper.saveUtterances import SaveUtterances
+from convokit.supreme.model.supremeCorpus import *
 
 """
 Script generates text and utterance json files for 

@@ -1,8 +1,8 @@
 import csv
 import sys
 
-from convokit.supreme.helper.KwicHelper import KwicHelper
-from convokit.supreme.helper.PlotHelper import PlotHelper
+from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.helper.plotHelper import PlotHelper
 
 
 def get_yearly_scores(modal_list, kwic_line_list, verb, option):
@@ -127,7 +127,7 @@ def main():
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     for verb, forms in input_verb_forms.items():
-        title = ", ".join(modals) + " with " + verb + '  ModalWithVerbTrends.py option ' + str(option)
+        title = ", ".join(modals) + " with " + verb + '  modalWithVerbTrends.py option ' + str(option)
         plot_filename = "-".join(modals) + "_with_" + verb + "_opt" + str(option) + ".png"
         print("Finding scores for '" + verb + "'...")
         score_dict = get_yearly_scores(modals, modal_kwics_list, {verb: forms}, option)

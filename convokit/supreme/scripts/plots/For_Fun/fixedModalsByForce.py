@@ -74,7 +74,7 @@ def dolines(alldict):
 
 bucket = 4
 modals = ["can" ]
-title = 'Can - FixedModalsByForce.py '
+title = 'Can - fixedModalsByForce.py '
 filepath = '../results/' + "2-onlyCanByForce.png"
 all_dictionary = plotyears(modals, bucket, "ask")
 

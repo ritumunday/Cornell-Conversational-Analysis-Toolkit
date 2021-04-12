@@ -1,5 +1,5 @@
-from convokit.supreme.helper.KwicHelper import KwicHelper
-from convokit.supreme.helper.PlotHelper import PlotHelper
+from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.helper.plotHelper import PlotHelper
 
 
 def get_yearly_scores(modal_list, kwic_line_list, keyword, option):
@@ -47,7 +47,7 @@ def main():
     modal_kwics_list = KwicHelper.file_line_list()
     y_label = option1
 
-    title = ", ".join(modals) + " with " + keyword + '  ModalWithVerbTrends.py option ' + str(option)
+    title = ", ".join(modals) + " with " + keyword + '  modalWithVerbTrends.py option ' + str(option)
     plot_filename = "collocation-"+"-".join(modals) + "_with_" + keyword + "_opt" + str(option) + ".png"
     print("Finding scores for '" + keyword + "'...")
     score_dict = get_yearly_scores(modals, modal_kwics_list, keyword, option)

@@ -73,7 +73,7 @@ def dolines(alldict):
 
 bucket = 4
 modals = ["can" ]
-title = ' ForceByRoles.py'
+title = ' forceByRoles.py'
 filepath = '../results/' + "5-PercentInterrogativesInModalUseByRole.png"
 all_dictionary = plotyears(modals, bucket, "ask")
 

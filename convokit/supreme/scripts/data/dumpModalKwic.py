@@ -2,8 +2,8 @@ import getopt
 import sys
 import os
 from convokit.supreme import SupremeCorpus
-from convokit.supreme.helper.KwicHelper import KwicHelper
-from convokit.supreme.helper.SaveUtterances import SaveUtterances
+from convokit.supreme.helper.kwicHelper import KwicHelper
+from convokit.supreme.helper.saveUtterances import SaveUtterances
 
 """
 Script runs processing and generates KWIC file for supreme-corpus. Accepts optional arguments "--minyear", "--maxyear", "--year", "--limit"
