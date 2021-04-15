@@ -20,7 +20,7 @@ class PlotHelper:
     #   average over 4 years of
     #   percent score of interrogative "may" usage on baseline of all "may" usages,
     #   percent score of interrogative "can" usage on baseline of all "can" usages.
-    results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
+    results_dir = "/convokit/supreme/results"
 
     def __init__(self):
         pass
@@ -76,7 +76,7 @@ class PlotHelper:
         ax.set_title(title)
         ax.legend()
         filepath = cls.results_dir + (
-            datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + filename
+            datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + "/" + filename
         if save_plot:
             plt.savefig(filepath, bbox_inches='tight')
         if show_plot:
@@ -88,7 +88,7 @@ class PlotHelper:
         line_list = []
         csv.field_size_limit(sys.maxsize)
         for fileyear in range(minyear, maxyear, 10):
-            kwic_file = cls.results_dir + "kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+            kwic_file = cls.results_dir + "/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
             with open(kwic_file, 'r') as data:
                 for line in csv.DictReader(data):
                     line_list.append(line)

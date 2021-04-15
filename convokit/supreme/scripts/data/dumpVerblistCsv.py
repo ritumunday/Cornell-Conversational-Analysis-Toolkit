@@ -10,7 +10,7 @@ Script dumps verb csv. Contains top 20 verbs for given modal for each year.
 """
 
 downloaded_corpus = download("supreme-corpus")
-results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
+results_dir = "/convokit/supreme/results"
 
 
 def get_file_list():
@@ -63,7 +63,7 @@ modals = ["can"]
 
 all_dictionary = get_verbs(modals)
 
-csvfile = results_dir + "can-verbs.csv"
+csvfile = results_dir + "/can-verbs.csv"
 separator = ","
 
 ft = open(csvfile, "w")

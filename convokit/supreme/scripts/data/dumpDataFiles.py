@@ -18,7 +18,7 @@ Change downloaded_corpus path to your default convokit download directory.
 
 def main():
     downloaded_corpus = download("supreme-corpus")
-    results_dir = os.path.dirname(os.path.abspath("requirements.txt"))+"/results"
+    results_dir = "/convokit/supreme/results"
 
     if len(sys.argv) <= 0:
         print("Usage: dumpModalKwic --minyear=1955 --maxyear=1960 --limit=100 --kwic=1")
@@ -47,7 +47,7 @@ def main():
     corpus = SentenceCorpus(maxyear, minyear, dirname=downloaded_corpus, utterance_end_index=utterance_end_index)
     print("Corpus initialized")
 
-    if not os.path.exists(results_dir + "utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"):
+    if not os.path.exists(results_dir + "/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"):
         print("Missing modal utterance json. Creating...")
         corpus.dump_modal_sentences()
     if kwic:

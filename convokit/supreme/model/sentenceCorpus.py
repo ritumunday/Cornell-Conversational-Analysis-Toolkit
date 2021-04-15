@@ -28,7 +28,7 @@ class SentenceCorpus(Corpus):
 
     """
     downloaded_corpus = download("supreme-corpus")
-    results_dir = os.path.dirname(os.path.abspath("requirements.txt"))+"/results"
+    results_dir = "/convokit/supreme/results"
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ class SentenceCorpus(Corpus):
         raw_file = open(self.results_dir + "/raw.txt", "w")
         # Write to a jsonfile
         json_file = open(
-            self.results_dir + "utterances" + str(self.meta['minyear']) + "-" + str(self.meta['maxyear']) + ".jsonl",
+            self.results_dir + "/utterances" + str(self.meta['minyear']) + "-" + str(self.meta['maxyear']) + ".jsonl",
             "w")
 
         count = 0
