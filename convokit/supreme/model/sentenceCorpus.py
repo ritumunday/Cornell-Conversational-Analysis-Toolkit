@@ -254,14 +254,4 @@ class SentenceCorpus(Corpus):
         print("========================================================================")
 
 
-def file_line_list(minyear=1950, maxyear=2020):
-    results_dir = "../../results/"
-    print("Assembling modal KWIC data...")
-    line_list = []
-    csv.field_size_limit(sys.maxsize)
-    for fileyear in range(minyear, maxyear, 10):
-        kwic_file = results_dir + "kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
-        with open(kwic_file, 'r') as data:
-            for line in csv.DictReader(data):
-                line_list.append(line)
-    return line_list
+
