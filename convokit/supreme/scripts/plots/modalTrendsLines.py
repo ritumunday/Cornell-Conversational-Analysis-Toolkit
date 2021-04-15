@@ -68,7 +68,7 @@ def main():
     bucket = bucket if bucket_ip == "" else int(bucket_ip)
     save_plot = save_plot if save_plot_ip == "" else bool(save_plot_ip)
 
-    modal_kwics_list = sentenceCorpus.file_line_list()
+    modal_kwics_list = PlotHelper.file_line_list()
     title = ", ".join(modals) + '  modalTrendsLines.py option ' + str(option)
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 

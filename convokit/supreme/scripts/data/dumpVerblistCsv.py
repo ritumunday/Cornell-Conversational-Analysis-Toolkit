@@ -1,17 +1,23 @@
 import csv
 import itertools
 import sys
+import os
+
+from convokit import download
 
 """
 Script dumps verb csv. Contains top 20 verbs for given modal for each year. 
 """
+
+downloaded_corpus = download("supreme-corpus")
+results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
 
 
 def get_file_list():
     linearr = []
     csv.field_size_limit(sys.maxsize)
     for fileyear in range(1950, 2020, 10):
-        csvfile = "../../results/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+        csvfile = results_dir+"/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
         with open(csvfile, 'r') as data:
             for line in csv.DictReader(data):
                 linearr.append(line)
@@ -57,7 +63,7 @@ modals = ["can"]
 
 all_dictionary = get_verbs(modals)
 
-csvfile = '../../results/' + "can-verbs.csv"
+csvfile = results_dir + "can-verbs.csv"
 separator = ","
 
 ft = open(csvfile, "w")

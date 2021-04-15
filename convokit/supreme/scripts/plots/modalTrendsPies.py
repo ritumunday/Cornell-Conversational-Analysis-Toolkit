@@ -1,7 +1,11 @@
+import os
+
 import matplotlib.pyplot as plt
 import csv
 
 from convokit import sys
+
+results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
 
 
 def plotyears(title, minyear, maxyear, limit, labels, passive, interrogative):
@@ -12,7 +16,7 @@ def plotyears(title, minyear, maxyear, limit, labels, passive, interrogative):
     print("Assembling modal data from file")
     csv.field_size_limit(sys.maxsize)
     title = "" if title == None else title
-    csvfile = "../results/kwic" + str(minyear) + "-" + str(maxyear) + ".csv"
+    csvfile = results_dir+"/kwic" + str(minyear) + "-" + str(maxyear) + ".csv"
     with open(csvfile, 'r') as data:
         for line in csv.DictReader(data):
             if interrogative is not None:
@@ -31,7 +35,7 @@ def plotyears(title, minyear, maxyear, limit, labels, passive, interrogative):
     fig1.suptitle(title + " " + str(minyear) + " - " + str(maxyear))
     ax1.pie(values, labels=labels, autopct='%1.1f%%')
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    plt.savefig('../results/' + title.replace(" ", "-") + "-" + str(minyear) + " - " + str(maxyear) + '.png',
+    plt.savefig(results_dir + title.replace(" ", "-") + "-" + str(minyear) + " - " + str(maxyear) + '.png',
                 bbox_inches='tight')
 
     plt.show()

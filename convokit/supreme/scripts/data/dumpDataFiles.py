@@ -1,7 +1,9 @@
 import getopt
 import sys
 import os
-from convokit.supreme import SentenceCorpus
+
+from convokit import download
+from convokit.supreme.model import SentenceCorpus
 
 """
 Script runs processing and generates Modal Json and optionally KWIC file for supreme-corpus. 
@@ -10,13 +12,13 @@ Defaults to year 1960 and infinite utterance limit.
 Kwic is 0 by default.
 Change downloaded_corpus path to your default convokit download directory.
 
-:rtype: excel result file in /supreme/results folder with datetime stamp
+:rtype: excel result file in /results folder with datetime stamp
 """
 
 
 def main():
-    downloaded_corpus = "/Users/rmundhe/.convokit/downloads/supreme-corpus"
-    results_dir = "../../results/"
+    downloaded_corpus = download("supreme-corpus")
+    results_dir = os.path.dirname(os.path.abspath("requirements.txt"))+"/results"
 
     if len(sys.argv) <= 0:
         print("Usage: dumpModalKwic --minyear=1955 --maxyear=1960 --limit=100 --kwic=1")

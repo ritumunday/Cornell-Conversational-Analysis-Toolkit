@@ -1,3 +1,6 @@
+import csv
+import os
+import sys
 from datetime import datetime
 
 import matplotlib.pyplot as plt
@@ -17,7 +20,7 @@ class PlotHelper:
     #   average over 4 years of
     #   percent score of interrogative "may" usage on baseline of all "may" usages,
     #   percent score of interrogative "can" usage on baseline of all "can" usages.
-    filedir = '/Users/rmundhe/PycharmProjects/Cornell-Conversational-Analysis-Toolkit/convokit/supreme/results/'
+    results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
 
     def __init__(self):
         pass
@@ -72,8 +75,8 @@ class PlotHelper:
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.legend()
-        filepath = cls.filedir + (
-            datetime.now().isoformat()) + ".png" if filename is None else cls.filedir + filename
+        filepath = cls.results_dir + (
+            datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + filename
         if save_plot:
             plt.savefig(filepath, bbox_inches='tight')
         if show_plot:

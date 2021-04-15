@@ -1,9 +1,10 @@
 import csv
+import os
 import sys
 
-from convokit.supreme.model import sentenceCorpus
 from convokit.supreme.helper.plotHelper import PlotHelper
 
+results_dir = os.path.dirname(os.path.abspath("requirements.txt")) + "/results"
 
 def get_yearly_scores(modal_list, kwic_line_list, verb, option):
     filtered = {mod: {} for mod in modal_list}
@@ -57,7 +58,7 @@ def load_verbs():
     line_list = []
     csv.field_size_limit(sys.maxsize)
 
-    csv_file = "../../results/verblist.csv"
+    csv_file = results_dir+"/verblist.csv"
     with open(csv_file, 'r') as data:
         for line in csv.DictReader(data):
             line_list.append(line)
@@ -123,7 +124,7 @@ def main():
         input_verb_forms = {main_verb: forms}
     # END Uncomment for interactive
 
-    modal_kwics_list = sentenceCorpus.file_line_list()
+    modal_kwics_list = PlotHelper.file_line_list()
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     for verb, forms in input_verb_forms.items():

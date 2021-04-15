@@ -3,6 +3,7 @@ import sys
 
 import csv
 from functools import reduce
+from convokit import download
 from convokit.phrasing_motifs import QuestionSentences
 from convokit.supreme.text_processing.modalSentences import ModalSentences
 from convokit.text_processing import TextParser, TextToArcs, sys
@@ -26,8 +27,8 @@ class SentenceCorpus(Corpus):
     :param downloaded_utterances_json(Optional): Path to the file containing utterance json based on supreme-corpus default corpus
 
     """
-    downloaded_corpus = "/Users/rmundhe/.convokit/downloads/supreme-corpus"
-    results_dir = "../../results/"
+    downloaded_corpus = download("supreme-corpus")
+    results_dir = os.path.dirname(os.path.abspath("requirements.txt"))+"/results"
 
     # ----------------------------------------------------------------------------------------------------------------
 
