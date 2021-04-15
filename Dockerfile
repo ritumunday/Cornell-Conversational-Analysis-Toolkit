@@ -4,4 +4,5 @@ ADD convokit /convokit
 COPY requirements.txt /requirements.txt
 WORKDIR /
 RUN pip3 install -r requirements.txt
-CMD export PYTHONPATH="${PYTHONPATH}:/convokit"; python3 -m http.server --directory /convokit/supreme/results
+CMD bash -c 'export PYTHONPATH="${PYTHONPATH}:/convokit"'
+ENTRYPOINT python3 -m http.server --directory /convokit/supreme/results

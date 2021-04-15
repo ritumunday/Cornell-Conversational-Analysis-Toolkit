@@ -103,7 +103,8 @@ def main():
                           "Option 4: " + option4 + "\n" +
                           "(Hit enter to use default 1):")
         modals_ip = input(
-            "Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
+            "Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, "
+            "may'):")
         main_verb_ip = input("Enter a verb (Default 'ask'):")
         forms_ip = input(
             "Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
