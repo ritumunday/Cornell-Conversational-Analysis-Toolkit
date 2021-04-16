@@ -78,7 +78,7 @@ class PlotHelper:
         filepath = cls.results_dir + (
             datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + "/" + filename
         if save_plot:
-            plt.savefig(filepath, bbox_inches='tight')
+            plt.savefig(filepath)
         if show_plot:
             plt.show()
 

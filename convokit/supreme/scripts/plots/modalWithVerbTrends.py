@@ -55,7 +55,7 @@ def get_yearly_scores(modal_list, kwic_line_list, verb, option):
 
 
 def load_verbs():
-    print("loading verbs")
+    print("Loading verbs from verb list")
     line_list = []
     csv.field_size_limit(sys.maxsize)
 
@@ -80,10 +80,10 @@ def load_verbs():
 def main():
     print("================ Modal Variations Over Time with Main Verb ================")
 
-    option1 = "Comparative choice of modals with verb"
-    option2 = "Comparative choice of modals with verb in interrogative"
+    option1 = "Cumulative modal use of verb / choice of this modal with verb\n over 10 year intervals"
+    option2 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only interrogative"
     option3 = "Comparative choice of modal with passive verb"
-    option4 = "Comparative choice of negative modal with verb"
+    option4 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only negative"
     # defaults
     # modals = ["can", "may", "would", "could", "should"]
     modals = ["can", "may"]
