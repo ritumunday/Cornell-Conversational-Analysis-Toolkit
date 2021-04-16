@@ -1,7 +1,9 @@
 import getopt
 import sys
 import os
-from convokit.supreme import SentenceCorpus
+
+from convokit import download
+from convokit.supreme.model import SentenceCorpus
 
 """
 Script runs processing and generates Modal Json and optionally KWIC file for supreme-corpus. 
@@ -10,13 +12,13 @@ Defaults to year 1960 and infinite utterance limit.
 Kwic is 0 by default.
 Change downloaded_corpus path to your default convokit download directory.
 
-:rtype: excel result file in /supreme/results folder with datetime stamp
+:rtype: excel result file in /results folder with datetime stamp
 """
 
 
 def main():
-    downloaded_corpus = "/Users/rmundhe/.convokit/downloads/supreme-corpus"
-    results_dir = "../../results/"
+    downloaded_corpus = download("supreme-corpus")
+    results_dir = "/convokit/supreme/results"
 
     if len(sys.argv) <= 0:
         print("Usage: dumpModalKwic --minyear=1955 --maxyear=1960 --limit=100 --kwic=1")
@@ -45,7 +47,7 @@ def main():
     corpus = SentenceCorpus(maxyear, minyear, dirname=downloaded_corpus, utterance_end_index=utterance_end_index)
     print("Corpus initialized")
 
-    if not os.path.exists(results_dir + "utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"):
+    if not os.path.exists(results_dir + "/utterances" + str(minyear) + "-" + str(maxyear) + ".jsonl"):
         print("Missing modal utterance json. Creating...")
         corpus.dump_modal_sentences()
     if kwic:

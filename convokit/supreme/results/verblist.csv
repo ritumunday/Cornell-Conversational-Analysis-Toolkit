@@ -1,15 +1,26 @@
 simple,past,gerund, pp
-bring,braught,bringing,
+reach,reached,reaching
+involve,involved,involving
+want,wanted,wanting
+collect,collected,collecting
+affect,affected,affecting
+dismiss,dismissed,dismissing
+sue,sued,suing
+grant,granted,granting
+adjourn, adjourned, adjourning
+recess, recessed, recessing
+bring,brought,bringing,
 give,gave,giving,given
 take,took,taking,taken
 ask,asked,asking
-answer,asnwered,answering
+answer,answered,answering
 challenge,challenged,challenging,
 understand,understood,understanding,
 argue,argued,arguing
 add,added,adding
 reduce,reduced,reducing
 finish,finished,finishing
+find, found, finding
 like,liked,liking
 proceed,proceeded,proceeding
 start,started,starting
@@ -45,6 +56,8 @@ permit,permitted,permitting
 allow,allowed,allowing
 consider,considered,considering
 ignore,ignored,ignoring
+notice, noticed, noticing
+pay,paid, paying
 focus,focused,focusing
 see,seemed,seeming
 carry,carried,carrying
@@ -56,3 +69,37 @@ request,requested,requesting
 drawn,drawn,drawing
 break,broke,broken,breaking
 stop,stopped,stopping
+please,pleased,pleasing
+attend,attended,attending
+leave,left,leaving
+know,knew,knowing,known
+feel,felt,following
+search,searched,searching
+follow,followed,following
+develop,developed,developing
+prevent,prevented,preventing
+choose,chose,chosen,choosing
+consider,considered,considering
+mean,meaning,meant
+seem,seemed,seeming
+provide,provided,providing
+think,thought,thinking
+respond,responded,responding
+present,presented,presenting
+impose,imposed,imposing
+agree,agreed,agreeing
+disagree,disagreed,disagreeing
+determine,determined,determining
+decide,decided,deciding
+depend,depended,depending
+assert,asserted,asserting
+authorize,authorized,authorizing
+accept,accepted,accepting
+reject,rejected,rejecting
+address,addressed,addressing
+apply,applied,applying
+call,called,calling
+cause,caused,causing
+change,changed,changing
+complete,completed,completing
+exist,existed,existing

@@ -1,3 +1,6 @@
+import csv
+import os
+import sys
 from datetime import datetime
 
 import matplotlib.pyplot as plt
@@ -17,7 +20,7 @@ class PlotHelper:
     #   average over 4 years of
     #   percent score of interrogative "may" usage on baseline of all "may" usages,
     #   percent score of interrogative "can" usage on baseline of all "can" usages.
-    filedir = '/Users/rmundhe/PycharmProjects/Cornell-Conversational-Analysis-Toolkit/convokit/supreme/results/'
+    results_dir = "/convokit/supreme/results"
 
     def __init__(self):
         pass
@@ -72,9 +75,21 @@ class PlotHelper:
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.legend()
-        filepath = cls.filedir + (
-            datetime.now().isoformat()) + ".png" if filename is None else cls.filedir + filename
+        filepath = cls.results_dir + (
+            datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + "/" + filename
         if save_plot:
-            plt.savefig(filepath, bbox_inches='tight')
+            plt.savefig(filepath)
         if show_plot:
             plt.show()
+
+    @classmethod
+    def file_line_list(cls, minyear=1950, maxyear=2020):
+        print("Assembling modal KWIC data...")
+        line_list = []
+        csv.field_size_limit(sys.maxsize)
+        for fileyear in range(minyear, maxyear, 10):
+            kwic_file = cls.results_dir + "/kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
+            with open(kwic_file, 'r') as data:
+                for line in csv.DictReader(data):
+                    line_list.append(line)
+        return line_list

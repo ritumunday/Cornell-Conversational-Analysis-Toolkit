@@ -42,7 +42,7 @@ def main():
         print("Please enter a keyword to collocate with modals")
         exit(0)
 
-    modal_kwics_list = sentenceCorpus.file_line_list()
+    modal_kwics_list = PlotHelper.file_line_list()
     y_label = option1
 
     title = ", ".join(modals) + " with " + keyword + '  modalCollocations.py'

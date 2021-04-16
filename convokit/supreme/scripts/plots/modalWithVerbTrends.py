@@ -1,8 +1,10 @@
 import csv
+import os
 import sys
 
-from convokit.supreme.model import sentenceCorpus
 from convokit.supreme.helper.plotHelper import PlotHelper
+
+results_dir = "/convokit/supreme/results"
 
 
 def get_yearly_scores(modal_list, kwic_line_list, verb, option):
@@ -53,11 +55,11 @@ def get_yearly_scores(modal_list, kwic_line_list, verb, option):
 
 
 def load_verbs():
-    print("loading verbs")
+    print("Loading verbs from verb list")
     line_list = []
     csv.field_size_limit(sys.maxsize)
 
-    csv_file = "../../results/verblist.csv"
+    csv_file = results_dir + "/verblist.csv"
     with open(csv_file, 'r') as data:
         for line in csv.DictReader(data):
             line_list.append(line)
@@ -78,10 +80,10 @@ def load_verbs():
 def main():
     print("================ Modal Variations Over Time with Main Verb ================")
 
-    option1 = "Comparative choice of modals with verb"
-    option2 = "Comparative choice of modals with verb in interrogative"
+    option1 = "Cumulative modal use of verb / choice of this modal with verb\n over 10 year intervals"
+    option2 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only interrogative"
     option3 = "Comparative choice of modal with passive verb"
-    option4 = "Comparative choice of negative modal with verb"
+    option4 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only negative"
     # defaults
     # modals = ["can", "may", "would", "could", "should"]
     modals = ["can", "may"]
@@ -89,41 +91,40 @@ def main():
     bucket = 10
     save_plot = True
     input_verb_forms = {"ask": ["ask", "asked", "asking"]}
+    autoload = input(
+        "Type 'auto' to process all verbs in the results/verblist.csv. To manually enter verbs, hit enter.")
+    if autoload == "auto":
+        input_verb_forms = load_verbs()
+    else:
+        option_ip = input("Enter an option \n"
+                          "Option 1: " + option1 + "\n" +
+                          "Option 2: " + option2 + "\n" +
+                          # "Option 3: " + option3 + "\n" +
+                          "Option 4: " + option4 + "\n" +
+                          "(Hit enter to use default 1):")
+        modals_ip = input(
+            "Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, "
+            "may'):")
+        main_verb_ip = input("Enter a verb (Default 'ask'):")
+        forms_ip = input(
+            "Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
+        bucket_ip = input("Enter number of years to average scores over (Default 10):")
+        save_plot_ip = input("Save plot in a file? 1/0 (Default 1):")
 
-    # START uncomment below to load from verb file from results/verblist.csv
-    # input_verb_forms = load_verbs()
-    # END uncomment for verblist file
+        modals = modals if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
+        option = option if option_ip == "" else int(option_ip)
+        bucket = bucket if bucket_ip == "" else int(bucket_ip)
+        save_plot = save_plot if save_plot_ip == "" else bool(save_plot_ip)
+        if main_verb_ip != "":
+            main_verb = main_verb_ip
+            if forms_ip == "":
+                forms = [main_verb, main_verb + "ed", main_verb + "s", main_verb + "ing"]
+            else:
+                forms = [x.strip() for x in forms_ip.split(',')]
+            input_verb_forms = {main_verb: forms}
+    # END interactive
 
-    # START Uncomment for interactive input
-
-    option_ip = input("Enter an option \n"
-                      "Option 1: " + option1 + "\n" +
-                      "Option 2: " + option2 + "\n" +
-                      # "Option 3: " + option3 + "\n" +
-                      "Option 4: " + option4 + "\n" +
-                      "(Hit enter to use default 1):")
-    modals_ip = input(
-        "Enter modal (or multiple modals for  comparison) separated by comma \n(Hit enter to use default 'can, may'):")
-    main_verb_ip = input("Enter a verb (Default 'ask'):")
-    forms_ip = input(
-        "Enter all forms of this verb separated by comma (Default '<verb>, <verb>ed, <verb>ing, <verb>s'):")
-    bucket_ip = input("Enter number of years to average scores over (Default 10):")
-    save_plot_ip = input("Save plot in a file? 1/0 (Default 1):")
-
-    modals = modals if modals_ip == "" else [x.strip() for x in modals_ip.split(',')]
-    option = option if option_ip == "" else int(option_ip)
-    bucket = bucket if bucket_ip == "" else int(bucket_ip)
-    save_plot = save_plot if save_plot_ip == "" else bool(save_plot_ip)
-    if main_verb_ip != "":
-        main_verb = main_verb_ip
-        if forms_ip == "":
-            forms = [main_verb, main_verb + "ed", main_verb + "s", main_verb + "ing"]
-        else:
-            forms = [x.strip() for x in forms_ip.split(',')]
-        input_verb_forms = {main_verb: forms}
-    # END Uncomment for interactive
-
-    modal_kwics_list = sentenceCorpus.file_line_list()
+    modal_kwics_list = PlotHelper.file_line_list()
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     for verb, forms in input_verb_forms.items():

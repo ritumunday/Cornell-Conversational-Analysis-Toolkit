@@ -3,6 +3,7 @@ import sys
 
 import csv
 from functools import reduce
+from convokit import download
 from convokit.phrasing_motifs import QuestionSentences
 from convokit.supreme.text_processing.modalSentences import ModalSentences
 from convokit.text_processing import TextParser, TextToArcs, sys
@@ -26,8 +27,8 @@ class SentenceCorpus(Corpus):
     :param downloaded_utterances_json(Optional): Path to the file containing utterance json based on supreme-corpus default corpus
 
     """
-    downloaded_corpus = "/Users/rmundhe/.convokit/downloads/supreme-corpus"
-    results_dir = "../../results/"
+    downloaded_corpus = download("supreme-corpus")
+    results_dir = "/convokit/supreme/results"
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -129,7 +130,7 @@ class SentenceCorpus(Corpus):
         raw_file = open(self.results_dir + "/raw.txt", "w")
         # Write to a jsonfile
         json_file = open(
-            self.results_dir + "utterances" + str(self.meta['minyear']) + "-" + str(self.meta['maxyear']) + ".jsonl",
+            self.results_dir + "/utterances" + str(self.meta['minyear']) + "-" + str(self.meta['maxyear']) + ".jsonl",
             "w")
 
         count = 0
@@ -253,14 +254,4 @@ class SentenceCorpus(Corpus):
         print("========================================================================")
 
 
-def file_line_list(minyear=1950, maxyear=2020):
-    results_dir = "../../results/"
-    print("Assembling modal KWIC data...")
-    line_list = []
-    csv.field_size_limit(sys.maxsize)
-    for fileyear in range(minyear, maxyear, 10):
-        kwic_file = results_dir + "kwic" + str(fileyear) + "-" + str(fileyear + 10) + ".csv"
-        with open(kwic_file, 'r') as data:
-            for line in csv.DictReader(data):
-                line_list.append(line)
-    return line_list
+
