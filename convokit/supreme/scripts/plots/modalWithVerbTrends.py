@@ -27,10 +27,16 @@ def get_yearly_scores(modal_list, kwic_line_list, verb, option):
 
         for mod in modal_list:
             matched_mod = True if line.get("Mod").lower().strip() == mod.lower().strip() else False
+            matched_set = True if ((line.get("Mod").lower().strip() in ("can","may" )  )) else False
             if option == 1:
                 if matched_mod and matched_mv:
+                    # if(2000<year   and line.get("Mod").lower().strip() == 'can'):
+                    #     print(year," ",filtered[mod].get(year)," ",line.get("Before") + line.get("Mod") +line.get(("After")))
+                    # if(year >2000 and line.get("Mod").lower().strip() == 'can'):
+                    #     print(year," ",filtered[mod].get(year)," ",line.get("Before") + line.get("Mod") +line.get(("After")))
                     filtered[mod][year] = 1 if filtered[mod].get(year) is None else filtered[mod][year] + 1
-                if matched_mv:
+                if matched_set and matched_mv:
+                # if  matched_mv:
                     baseline[mod][year] = 1 if baseline[mod].get(year) is None else baseline[mod][year] + 1
 
             if option == 2:
@@ -80,7 +86,7 @@ def load_verbs():
 def main():
     print("================ Modal Variations Over Time with Main Verb ================")
 
-    option1 = "Cumulative modal use of verb / choice of this modal with verb\n over 10 year intervals"
+    option1 = "% proportion of can and may with ask"
     option2 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only interrogative"
     option3 = "Comparative choice of modal with passive verb"
     option4 = "Choice of modals per total modal \n usage of given verb in 10 year intervals \n only negative"
@@ -128,16 +134,20 @@ def main():
     y_label = option4 if option == 4 else (option3 if option == 3 else (option2 if option == 2 else option1))
 
     for verb, forms in input_verb_forms.items():
-        title = ", ".join(modals) + " with " + verb + '  modalWithVerbTrends.py option ' + str(option)
+        # title = ", ".join(modals) + " with " + verb + '  modalWithVerbTrends.py option ' + str(option)
+        title = ""
         plot_filename = "-".join(modals) + "_with_" + verb + "_opt" + str(option) + ".png"
         print("Finding scores for '" + verb + "'...")
         score_dict = get_yearly_scores(modals, modal_kwics_list, {verb: forms}, option)
         print("Normalizing scores...")
         normalized_scores = PlotHelper.get_normalized_scores(score_dict, bucket, step_plot=True)
         print("Plotting scores...")
+        raw = normalized_scores.get("raw")
+        # raw = None
         PlotHelper.plot_lines(normalized_scores.get("normalized"), y_label, title, save_plot=save_plot,
                               filename=plot_filename,
-                              raw=normalized_scores.get("raw"))
+                              raw = raw)
+        # PlotHelper.plot_bars(normalized_scores.get("normalized"), y_label, title,filename=plot_filename  )
         print("Finished '" + verb + "'.")
 
 

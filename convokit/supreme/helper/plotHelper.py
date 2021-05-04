@@ -1,5 +1,6 @@
 import csv
-import os
+import numpy as np
+
 import sys
 from datetime import datetime
 
@@ -20,19 +21,19 @@ class PlotHelper:
     #   average over 4 years of
     #   percent score of interrogative "may" usage on baseline of all "may" usages,
     #   percent score of interrogative "can" usage on baseline of all "can" usages.
-    results_dir = "/convokit/supreme/results"
+    results_dir = "../../results"
 
     def __init__(self):
         pass
 
     @classmethod
-    def get_normalized_scores(cls, score_dict, bucket=4, step_plot=False):
+    def get_normalized_scores(cls, score_dict, bucket=4, step_plot=False, normalizer=100):
         score = score_dict.get("score")
         baseline = score_dict.get("baseline")
         subplot_names = baseline.keys()
         ratio = {subplt: {} for subplt in subplot_names}
         raw = {subplt: {} for subplt in subplot_names}
-        for year in range(1959, 2019, bucket):
+        for year in range(1950, 2020, bucket):
             for subplt in subplot_names:
                 over = 0
                 filterct = 0
@@ -46,7 +47,8 @@ class PlotHelper:
                             filterct = filterct + score[subplt][y]
                 if filterct > 0 and basect > 0:
                     # get percent over the bucket
-                    ratio[subplt][year] = ((filterct / basect) * 100)
+                    ratio[subplt][year] = ((filterct / basect) * normalizer)
+                    print(subplt, ",", year, ",", ratio[subplt][year])
                 else:
                     ratio[subplt][year] = 0
                 raw[subplt][year] = {"ct": filterct, "over": basect}
@@ -61,20 +63,29 @@ class PlotHelper:
     def plot_lines(cls, dict_of_dicts, ylabel="", title="", save_plot=False, show_plot=True, filename=None, raw=None,
                    bucket=10):
         fig, ax = plt.subplots()
-        for k, v in dict_of_dicts.items():
-            ax.plot(v.keys(), v.values(), label=k, markevery=2)
-            ax.xaxis.set_major_locator(MultipleLocator(10))
-            for x, y in v.items():
-                if x % bucket == 0:
-                    label = str(round(raw.get(k).get(x).get("ct"))) + " of " + str((raw.get(k).get(x).get("over")))
-
-                    plt.annotate(label,  # this is the text
-                                 (x, y),
-                                 ha="center")
-
+        lst = []
+        with open( 'pm.csv', 'w') as f:
+            for k, v in dict_of_dicts.items():
+                ax.plot(v.keys(), v.values(), label=k, markevery=2)
+                ax.xaxis.set_major_locator(MultipleLocator(10))
+                lst = []
+                for x, y in v.items():
+                    if x % bucket == 0:
+                        if raw is not None:
+                            # label = str(round(raw.get(k).get(x).get("ct"))) + " of " + str((raw.get(k).get(x).get("over")))
+                            label = str(round(raw.get(k).get(x).get("ct")))
+                            plt.annotate(label, (x, y), ha="right", va="top")
+                        lst.append(str(y))
+                f.write(k + "," + ",".join(lst) + "\n")
+            f.close()
         ax.set_ylabel(ylabel)
         ax.set_title(title)
-        ax.legend()
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+        plt.legend(bbox_to_anchor=(1.04,1), loc="upper left")
+
+
         filepath = cls.results_dir + (
             datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + "/" + filename
         if save_plot:
@@ -93,3 +104,26 @@ class PlotHelper:
                 for line in csv.DictReader(data):
                     line_list.append(line)
         return line_list
+
+    @classmethod
+    def plot_bars(cls, dict_of_dicts, ylabel="", title="",  filename=None):
+        width = 0.35  # the width of the bars
+        fig, ax = plt.subplots()
+        x = np.arange(7)
+        labels = ["50","60","70","80","90","00","10" ]
+        i=0
+        for k, v in dict_of_dicts.items():
+            vlist = list(v.values())
+            vlistlabels = vlist[::10]
+            ax.bar(x + (i*width), vlistlabels, width, label=k)
+            i = i + 1
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
+        filepath = cls.results_dir + ( datetime.now().isoformat()) + ".png" if filename is None else cls.results_dir + "/" + filename
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+        ax.legend(bbox_to_anchor=(1.04,1), loc="upper left")
+        plt.savefig(filepath)
+        plt.show()
+
+# can,may,might,could,would,will,should

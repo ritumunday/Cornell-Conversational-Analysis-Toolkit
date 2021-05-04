@@ -3,14 +3,14 @@ import sys
 
 import csv
 from functools import reduce
-from convokit import download
+from convokit import download, Callable
 from convokit.phrasing_motifs import QuestionSentences
 from convokit.supreme.text_processing.modalSentences import ModalSentences
 from convokit.text_processing import TextParser, TextToArcs, sys
 from convokit.text_processing import TextProcessor
 
 from convokit.model import *
-from typing import List, Optional
+from typing import List, Optional, Generator
 import json
 from nltk.tokenize import sent_tokenize
 
@@ -28,7 +28,7 @@ class SentenceCorpus(Corpus):
 
     """
     downloaded_corpus = download("supreme-corpus")
-    results_dir = "/convokit/supreme/results"
+    results_dir = "../../results"
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -170,6 +170,19 @@ class SentenceCorpus(Corpus):
         print("Total modals parsed: ", modal_sentences)
         print("Finished")
 
+    def iter_utterances(self, selector: Optional[Callable[[Utterance], bool]] = lambda utt: True) -> \
+            Generator[Utterance, None, None]:
+        """
+        Get utterances in the Corpus, with an optional selector that filters for Utterances that should be included.
+
+        :param selector: a (lambda) function that takes an Utterance and returns True or False (i.e. include / exclude).
+            By default, the selector includes all Utterances in the Corpus.
+        :return: a generator of Utterances
+        """
+        for v in self.utterances.values():
+            if selector(v):
+                yield v
+
     def printline(self, parsedsent, u, passive, inter, mod, modalindex, verb, passivized):
         toks = list(map(lambda x: x['tok'], parsedsent["toks"]))
         firstseg = "" if modalindex == 0 else reduce((lambda x, y: x + " " + y), toks[0:modalindex])
@@ -194,7 +207,6 @@ class SentenceCorpus(Corpus):
         print("========================================================================")
         print("Started processing")
         print("========================================================================")
-        self.corpus = corpus
 
         print("Creating KWIC")
         textprep = TextProcessor(proc_fn=self.prep_text, output_field='clean_text')
@@ -206,7 +218,7 @@ class SentenceCorpus(Corpus):
         self.ft.write(
             "Year" + self.separator + "Sentence ID" + self.separator + "Before" + self.separator + "Mod" + self.separator + "After" + self.separator + "Main Verb" + self.separator + "Passivized" + self.separator + "Passive" + self.separator + "Interrogative" + self.separator + "Role" + self.separator + "Speaker\n")
         # assuming utterance file is sorted by year, iterate. Skip all non modals.
-        for u in self.corpus.iter_utterances():
+        for u in self.iter_utterances():
             u = textprep.transform_utterance(u)
             u = textparser.transform_utterance(u)
             u = getmodals.transform_utterance(u)
@@ -253,5 +265,55 @@ class SentenceCorpus(Corpus):
         print("Finished processing. Result file saved in supreme/results folder.")
         print("========================================================================")
 
+    def get_length(self, year):
+        textprep = TextProcessor(proc_fn=self.prep_text, output_field='clean_text')
+        wordvct = 0
+        for u in self.iter_utterances():
+            u = textprep.transform_utterance(u)
+            clean_utt = u.meta["clean_text"]
+            try:
+                if int(u.meta["year"]) == year:
+                    wordvct += len(clean_utt)
+            except Exception as e:
+                print("Exception on line ", u.id, ":", e)
 
+    def dump_all(self, resultfile, separator=","):
+        self.separator = separator
+        self.ft = open(resultfile, "w")
+        print("========================================================================")
+        print("Started processing")
+        print("========================================================================")
+        print("Creating Csv")
+        textprep = TextProcessor(proc_fn=self.prep_text, output_field='clean_text')
+        self.ft.write(
+            "Year" + self.separator + "Sentence ID" + self.separator + "Text\n")
+        # assuming utterance file is sorted by year, iterate. Skip all non modals.
+        for u in self.iter_utterances():
+            u = textprep.transform_utterance(u)
+            clean_sents = u.meta["clean_text"]
+            try:
+                if len(clean_sents):
+                    fileline = u.meta["year"] + self.separator + u.id + self.separator + clean_sents+"\n"
+                    self.ft.write(fileline)
+            except Exception as e:
+                print("Exception on line ", u.id, ":", e)
+        self.ft.close()
+        print("========================================================================")
+        print("Finished processing. Result file saved in supreme/results folder.")
+        print("========================================================================")
 
+    def dump_stats(self):
+
+        textprep = TextProcessor(proc_fn=self.prep_text, output_field='clean_text')
+        # assuming utterance file is sorted by year, iterate. Skip all non modals.
+        for u in self.iter_utterances():
+            u = textprep.transform_utterance(u)
+            clean_sents = u.meta["clean_text"]
+            try:
+                if len(clean_sents):
+                    fileline = u.meta["year"] + self.separator + u.id + self.separator + clean_sents+"\n"
+            except Exception as e:
+                print("Exception on line ", u.id, ":", e)
+        print("========================================================================")
+        print("Finished processing. Result file saved in supreme/results folder.")
+        print("========================================================================")
